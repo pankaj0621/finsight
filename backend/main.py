@@ -77,9 +77,9 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        os.getenv("FRONTEND_URL", "https://finsight-brown-mu.vercel.app/"),
+        "https://finsight-brown-mu.vercel.app", # Apna Vercel URL yahan dalein
+        "http://localhost:5173",
         "http://localhost:3000",
-        "http://localhost:5174",
     ],
     allow_credentials=True,
     allow_methods=["*"],
