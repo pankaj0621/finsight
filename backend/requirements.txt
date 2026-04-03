@@ -5,8 +5,10 @@ uvicorn[standard]==0.29.0
 # Environment variable loading
 python-dotenv==1.0.1
 
-# Google Gemini SDK
-google-generativeai==0.7.2
+# Groq SDK (LLaMA 3.3 70B — free & fast)
+# FIX: Replaced google-generativeai (wrong) with groq (actually used in main.py)
+# Get your free API key at: https://console.groq.com
+groq==0.9.0
 
 # File upload support
 python-multipart==0.0.9
@@ -18,9 +20,10 @@ pydantic==2.7.1
 pymupdf==1.24.3
 
 # Scanned PDF / image OCR — Strategy 2
-# Requires Tesseract binary: https://github.com/UB-Mannheim/tesseract/wiki (Windows)
-# Mac: brew install tesseract
-# Ubuntu: sudo apt install tesseract-ocr
+# Requires Tesseract binary installed separately:
+#   Windows: https://github.com/UB-Mannheim/tesseract/wiki
+#   Mac:     brew install tesseract
+#   Ubuntu:  sudo apt install tesseract-ocr poppler-utils
 pytesseract==0.3.10
 pdf2image==1.17.0
 Pillow==10.3.0
@@ -28,3 +31,7 @@ Pillow==10.3.0
 # Excel and CSV parsing — Strategy 3
 pandas==2.2.2
 openpyxl==3.1.2
+
+# PDF report generation (used in /api/generate-report endpoint)
+# FIX: Changed version from 2.8.7 (does not exist) to 2.7.9 (latest stable)
+fpdf2==2.7.9
