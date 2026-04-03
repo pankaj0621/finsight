@@ -12,7 +12,7 @@ import {
 } from "recharts";
 
 // Base URL of the FastAPI backend — reads from VITE_API_URL in .env
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
+const API_BASE = import.meta.env.VITE_API_URL || "https://finsight-backend-f0pq.onrender.com";
 
 // =============================================================================
 // Fonts & Global CSS (injected via <style> tag)
