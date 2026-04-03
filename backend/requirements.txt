@@ -1,37 +1,37 @@
 # Core API framework
-fastapi==0.111.0
-uvicorn[standard]==0.29.0
+fastapi
+uvicorn[standard]
 
 # Environment variable loading
-python-dotenv==1.0.1
+python-dotenv
 
 # Groq SDK (LLaMA 3.3 70B — free & fast)
 # FIX: Replaced google-generativeai (wrong) with groq (actually used in main.py)
 # Get your free API key at: https://console.groq.com
-groq==0.9.0
+groq
 
 # File upload support
-python-multipart==0.0.9
+python-multipart
 
 # Data validation
-pydantic==2.7.1
+pydantic
 
 # PDF extraction (text-based PDFs) — Strategy 1
-pymupdf==1.24.3
+pymupdf
 
 # Scanned PDF / image OCR — Strategy 2
 # Requires Tesseract binary installed separately:
 #   Windows: https://github.com/UB-Mannheim/tesseract/wiki
 #   Mac:     brew install tesseract
 #   Ubuntu:  sudo apt install tesseract-ocr poppler-utils
-pytesseract==0.3.10
-pdf2image==1.17.0
-Pillow==10.3.0
+pytesseract
+pdf2image
+Pillow
 
 # Excel and CSV parsing — Strategy 3
-pandas==2.2.2
-openpyxl==3.1.2
+pandas
+openpyxl
 
 # PDF report generation (used in /api/generate-report endpoint)
 # FIX: Changed version from 2.8.7 (does not exist) to 2.7.9 (latest stable)
-fpdf2==2.7.9
+fpdf2
