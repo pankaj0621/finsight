@@ -230,12 +230,12 @@ if FPDF_AVAILABLE:
 # =============================================================================
 
 def compute_ratios(d: FinancialData) -> dict:
-    revenue      = d.revenue or 1
-    prev_revenue = d.prevRevenue or revenue
-    current_liab = d.currentLiabilities or 1
-    total_assets = d.totalAssets or 1
-    total_liab   = d.totalLiabilities or 0
-    inventory    = d.inventory or 0
+    revenue      = d.revenue if d.revenue != 0 else 1
+    prev_revenue = d.prevRevenue if d.prevRevenue != 0 else revenue
+    current_liab = d.currentLiabilities if d.currentLiabilities != 0 else 1
+    total_assets = d.totalAssets if d.totalAssets != 0 else 1
+    total_liab   = d.totalLiabilities if d.totalLiabilities != 0 else 0
+    inventory    = d.inventory if d.inventory != 0 else 0
     op_expenses  = d.operatingExpenses or (revenue * 0.8)
 
     # Naye metrics frontend ke liye (Working Capital, EBITDA Margin, Burn Rate)
