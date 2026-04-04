@@ -1,7 +1,7 @@
 // =============================================================================
-//  FinSight v4.0 — NEXT-GEN FINTECH UI (English Version)
+//  FinSight v4.0 — NEXT-GEN FINTECH UI
 //  Cyber-Minimalist · Bento Grid · Glassmorphism · Dynamic Grade Glow
-//  Design fixed so text isn't black (Mobile Navbar Fixed)
+//  All existing logic preserved — only styles & JSX structure overhauled
 // =============================================================================
 
 import { useState, useEffect, useRef } from "react";
@@ -12,11 +12,10 @@ import {
   ReferenceLine, Area, AreaChart, CartesianGrid, Line,
 } from "recharts";
 
-// Set API base URL
 const API_BASE = import.meta.env.VITE_API_URL || "https://finsight-backend-f0pq.onrender.com";
 
 // =============================================================================
-// Fonts and Global CSS — Design and Colors
+// Fonts & Global CSS — God-Level Redesign
 // =============================================================================
 const FONTS = `
   @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,700&family=Inter:wght@300;400;500;600&family=Geist+Mono:wght@300;400;500;600&display=swap');
@@ -73,12 +72,6 @@ const styles = `
     overflow-x: hidden;
   }
 
-  /* Fix browser default button color so black text doesn't appear */
-  button {
-    font-family: inherit;
-    color: var(--text); 
-  }
-
   /* ── Scrollbar ── */
   ::-webkit-scrollbar { width: 4px; height: 4px; }
   ::-webkit-scrollbar-track { background: transparent; }
@@ -117,7 +110,7 @@ const styles = `
   }
 
   /* ════════════════════════════════════════════
-     GLASSMORPHISM UTILITY (Glass Effect)
+     GLASSMORPHISM UTILITY
   ════════════════════════════════════════════ */
   .glass {
     background: var(--glass);
@@ -153,7 +146,7 @@ const styles = `
   }
 
   /* ════════════════════════════════════════════
-     HEADER (Top section)
+     HEADER
   ════════════════════════════════════════════ */
   .header {
     display: flex;
@@ -250,7 +243,7 @@ const styles = `
   }
 
   /* ════════════════════════════════════════════
-     HERO SECTION (Main Banner)
+     HERO SECTION
   ════════════════════════════════════════════ */
   .hero {
     padding: 72px 0 48px;
@@ -318,7 +311,7 @@ const styles = `
   }
 
   /* ════════════════════════════════════════════
-     FORM SECTION (Data input form)
+     FORM SECTION
   ════════════════════════════════════════════ */
   .form-wrap {
     padding-bottom: 80px;
@@ -443,7 +436,7 @@ const styles = `
   .field input, .field select {
     background: rgba(255,255,255,0.04);
     border: 1px solid var(--glass-border);
-    color: var(--text); /* Black text fix */
+    color: var(--text);
     padding: 11px 14px;
     border-radius: var(--radius-sm);
     font-family: var(--font-mono);
@@ -464,7 +457,7 @@ const styles = `
     opacity: 0.7;
   }
 
-  .field select option { background: #0f0f1a; color: var(--text); }
+  .field select option { background: #0f0f1a; }
 
   /* CTA button */
   .btn-cta {
@@ -513,7 +506,7 @@ const styles = `
   }
 
   /* ════════════════════════════════════════════
-     UPLOAD ZONE (File drop area)
+     UPLOAD ZONE
   ════════════════════════════════════════════ */
   .upload-zone {
     border: 2px dashed rgba(255,255,255,0.08);
@@ -647,7 +640,7 @@ const styles = `
   .add-year-btn:hover { border-color: var(--teal); color: var(--teal); }
 
   /* ════════════════════════════════════════════
-     LOADING (Waiting screen)
+     LOADING
   ════════════════════════════════════════════ */
   .loading-wrap {
     display: flex;
@@ -1521,7 +1514,7 @@ const styles = `
   }
 
   /* ════════════════════════════════════════════
-     RECOMMENDATIONS (Priority Actions)
+     RECOMMENDATIONS
   ════════════════════════════════════════════ */
   .rec-item {
     background: rgba(255,255,255,0.02);
@@ -1777,7 +1770,7 @@ const styles = `
   .chat-send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
   /* ════════════════════════════════════════════
-     MOBILE BOTTOM NAV (Text was disappearing here)
+     MOBILE BOTTOM NAV
   ════════════════════════════════════════════ */
   .mobile-nav {
     display: none;
@@ -1798,7 +1791,6 @@ const styles = `
     .chat-panel { bottom: 140px; }
   }
 
-  /* Default black text was appearing here due to missing var(--text2) */
   .mobile-nav-btn {
     display: flex;
     flex-direction: column;
@@ -1810,17 +1802,16 @@ const styles = `
     padding: 6px 12px;
     border-radius: var(--radius-xs);
     transition: background 0.2s;
-    color: var(--text2); /* 👈 Yeh fix hai */
   }
 
-  .mobile-nav-btn:hover { background: rgba(255,255,255,0.05); color: var(--text); }
+  .mobile-nav-btn:hover { background: rgba(255,255,255,0.05); }
 
-  .mobile-nav-icon { font-size: 18px; color: inherit; }
+  .mobile-nav-icon { font-size: 18px; }
 
   .mobile-nav-label {
     font-family: var(--font-mono);
     font-size: 9px;
-    color: inherit;
+    color: var(--text3);
     letter-spacing: 0.06em;
   }
 
@@ -1906,10 +1897,10 @@ const DEMOS = {
   "Growth Stage":  {companyName:"NovaSpark Solutions",industry:"Technology",revenue:"8500000",prevRevenue:"5000000",netProfit:"420000",totalAssets:"12000000",totalLiabilities:"5500000",currentAssets:"4800000",currentLiabilities:"2200000",inventory:"600000",operatingExpenses:"7200000"},
 };
 const EMPTY_FORM = {companyName:"",industry:"General",revenue:"",prevRevenue:"",netProfit:"",totalAssets:"",totalLiabilities:"",currentAssets:"",currentLiabilities:"",inventory:"",operatingExpenses:""};
-const LOADING_STEPS = ["PARSING FINANCIAL DATA...","COMPUTING ALTMAN Z-SCORE...","RUNNING SCORING ENGINE...","EXTRACTING SHAP ATTRIBUTIONS...","CALLING GROQ AI...","BUILDING FORECAST TRAJECTORY..."];
+const LOADING_STEPS = ["PARSING FINANCIAL DATA...","COMPUTING ALTMAN Z-SCORE...","RUNNING SCORING ENGINE...","COMPUTING SHAP ATTRIBUTIONS...","CALLING GROQ AI...","BUILDING FORECAST TRAJECTORY..."];
 const INDUSTRIES = ["Technology","Manufacturing","Retail","Healthcare","Finance","Real Estate","Education","General"];
 const BENCH_LABELS = {currentRatio:"Current Ratio",quickRatio:"Quick Ratio",debtRatio:"Debt Ratio",netProfitMargin:"Net Margin",revenueGrowth:"Revenue Growth",assetTurnover:"Asset Turnover"};
-const QUICK_QUESTIONS = ["Why is my score like this?","How to reduce debt?","Is my growth healthy?","What is my biggest risk?"];
+const QUICK_QUESTIONS = ["Why is my score this?","How to reduce debt?","Is my growth healthy?","What's my biggest risk?"];
 
 // =============================================================================
 // Grade color helper
@@ -1945,7 +1936,7 @@ function BenchmarkSection({ benchmarks, industry }) {
               </div>
             </div>
             <div className={`bm-status ${st==="better"?"bm-better":st==="onpar"?"bm-onpar":"bm-worse"}`}>
-              {st==="better"?"▲ BETTER":st==="onpar"?"≈ ON PAR":"▼ WORSE"}
+              {st==="better"?"▲ BETTER":st==="onpar"?"≈ PAR":"▼ BELOW"}
             </div>
           </div>
         );
@@ -2022,8 +2013,8 @@ function SimulationSection({ originalResult, originalForm }) {
 
   return (
     <div className="sim-panel">
-      <div className="sim-title"><div className="sim-title-icon"/>SCENARIO SIMULATOR (SEE IMPACT)</div>
-      <div className="sim-subtitle">Adjust sliders to see how changes impact your financial score.</div>
+      <div className="sim-title"><div className="sim-title-icon"/>SCENARIO SIMULATOR</div>
+      <div className="sim-subtitle">Adjust levers to model how business changes affect your financial health score.</div>
       <div className="sim-sliders">
         {[
           {key:"revenueChange",  label:"Revenue Delta"},
@@ -2050,7 +2041,7 @@ function SimulationSection({ originalResult, originalForm }) {
         ))}
       </div>
       <button className="btn-simulate" onClick={runSim} disabled={simLoading}>
-        {simLoading?"CALCULATING...":"▶ RUN SIMULATION"}
+        {simLoading?"COMPUTING...":"▶ RUN SIMULATION"}
       </button>
       {simResult && (
         <div className="sim-result-grid">
@@ -2078,7 +2069,7 @@ function SimulationSection({ originalResult, originalForm }) {
 // Floating Chat Widget
 // =============================================================================
 function ChatWidget({ analysisContext, visible, onClose }) {
-  const [messages,    setMessages]    = useState([{role:"ai",text:"Hello! I am FinSight AI. Ask me anything about your company's financial health."}]);
+  const [messages,    setMessages]    = useState([{role:"ai",text:"Hi! I'm FinSight AI. Ask me anything about your company's financial health."}]);
   const [input,       setInput]       = useState("");
   const [chatLoading, setChatLoading] = useState(false);
   const endRef = useRef(null);
@@ -2098,9 +2089,9 @@ function ChatWidget({ analysisContext, visible, onClose }) {
         body:JSON.stringify({message:msg, analysisContext}),
       });
       const data = await res.json();
-      setMessages(m=>[...m,{role:"ai",text:data.answer||"Sorry, unable to process."}]);
+      setMessages(m=>[...m,{role:"ai",text:data.answer||"Sorry, couldn't process that."}]);
     } catch(e) {
-      setMessages(m=>[...m,{role:"ai",text:"Connection error occurred. Please try again."}]);
+      setMessages(m=>[...m,{role:"ai",text:"Connection error. Try again."}]);
     } finally {
       setChatLoading(false);
     }
@@ -2266,7 +2257,7 @@ export default function FinSight() {
       a.href=url;a.download=`FinSight_Report_${af.companyName||"SME"}.pdf`;
       document.body.appendChild(a);a.click();a.remove();
     }catch(e){
-      alert(`PDF generation failed: ${e.message}`);
+      alert(`PDF failed: ${e.message}`);
     }finally{setDownloading(false);}
   };
 
@@ -2325,7 +2316,7 @@ Summary: ${result.summary}`;
     metrics:result.metrics,altman:result.altman,summary:result.summary,
   }:{};
 
-  // ── Tooltip for recharts (Text Color Issue Fixed) ──
+  // ── Tooltip for recharts ──
   const ChartTooltip = ({contentStyle:_,...p}) => (
     <div style={{background:"rgba(8,8,16,0.95)",border:"1px solid rgba(255,255,255,0.08)",borderRadius:8,padding:"8px 12px",fontFamily:"Geist Mono",fontSize:11,color:"#f1f5f9",...p}}/>
   );
@@ -2369,7 +2360,7 @@ Summary: ${result.summary}`;
                 <span style={{width:6,height:6,borderRadius:"50%",background:"#a3e635",flexShrink:0,display:"inline-block"}}/>
                 POWERED BY GROQ LLAMA 3.3 70B
               </div>
-              <h2>AI Financial<br/>Health <em>Intelligence</em> for SMEs</h2>
+              <h2>AI Financial Health<br/><em>Intelligence</em> for SMEs</h2>
               <p className="hero-sub">Real-time scoring · Altman Z-Score · SHAP explainability · Scenario simulation · AI chat</p>
               <div className="hero-tags">
                 {["Groq LLaMA","Altman Z-Score","SHAP XAI","Industry Benchmarking","Scenario Sim","PDF Export"].map(t=>(
@@ -2389,7 +2380,7 @@ Summary: ${result.summary}`;
               <div className="mode-tabs">
                 {["manual","upload","multiyear"].map(m=>(
                   <button key={m} className={`mode-tab ${inputMode===m?"active":""}`} onClick={()=>setInputMode(m)}>
-                    {m==="manual"?"Manual Entry":m==="upload"?"Upload Doc":"Multi-Year Data"}
+                    {m==="manual"?"Manual Entry":m==="upload"?"Upload Doc":"Multi-Year"}
                   </button>
                 ))}
               </div>
@@ -2412,20 +2403,20 @@ Summary: ${result.summary}`;
                   >
                     <input type="file" accept=".pdf,.xlsx,.xls,.csv" onChange={e=>handleFileUpload(e.target.files[0])}/>
                     <div className="upload-icon">📊</div>
-                    <h3>Drop Financial Statement Here</h3>
-                    <p>PDF · Excel · CSV — AI will automatically extract all fields</p>
+                    <h3>Drop Financial Statement</h3>
+                    <p>PDF · Excel · CSV — AI extracts all fields automatically</p>
                     {uploadState.status!=="idle" && (
                       <>
                         <div className="upload-bar-track"><div className="upload-bar-fill" style={{width:uploadState.progress+"%"}}/></div>
                         <div className="upload-status">
-                          {uploadState.status==="processing"?"Extracting via AI...":uploadState.status==="done"?`✓ ${uploadState.extracted?.fieldsExtracted||0} fields extracted (${uploadState.extracted?.confidence||0}% confidence)`:uploadState.status==="error"?"✗ Extraction failed":""}
+                          {uploadState.status==="processing"?"Extracting with AI...":uploadState.status==="done"?`✓ Extracted ${uploadState.extracted?.fieldsExtracted||0} fields (${uploadState.extracted?.confidence||0}% confidence)`:uploadState.status==="error"?"✗ Extraction failed":""}
                         </div>
                       </>
                     )}
                   </div>
                   {uploadState.extracted && (
                     <div className="extracted-preview">
-                      <div className="extracted-preview-title">Extracted Financial Data — Check before analyzing</div>
+                      <div className="extracted-preview-title">Extracted Financial Data — Review Before Analyzing</div>
                       <div className="extracted-grid">
                         {Object.entries(uploadState.extracted).filter(([k])=>!["confidence","fieldsExtracted"].includes(k)).map(([k,v])=>(
                           <div className="extracted-item" key={k}>
@@ -2443,7 +2434,7 @@ Summary: ${result.summary}`;
               {inputMode==="manual" && (
                 <>
                   <div className="form-block">
-                    <div className="form-block-label">Company Information</div>
+                    <div className="form-block-label">Company Info</div>
                     <div className="form-grid">
                       <div className="field"><label>COMPANY NAME</label><input placeholder="e.g. Acme Pvt Ltd" value={form.companyName} onChange={e=>set("companyName",e.target.value)}/></div>
                       <div className="field"><label>INDUSTRY</label><select value={form.industry} onChange={e=>set("industry",e.target.value)}>{INDUSTRIES.map(i=><option key={i}>{i}</option>)}</select></div>
@@ -2477,17 +2468,17 @@ Summary: ${result.summary}`;
                   <div className="form-block">
                     <div className="form-block-label">Company</div>
                     <div className="form-grid">
-                      <div className="field"><label>COMPANY NAME</label><input placeholder="e.g. Acme Pvt Ltd" value={form.companyName} onChange={e=>set("companyName",e.target.value)}/></div>
+                      <div className="field"><label>COMPANY NAME</label><input placeholder="Acme Pvt Ltd" value={form.companyName} onChange={e=>set("companyName",e.target.value)}/></div>
                       <div className="field"><label>INDUSTRY</label><select value={form.industry} onChange={e=>set("industry",e.target.value)}>{INDUSTRIES.map(i=><option key={i}>{i}</option>)}</select></div>
                     </div>
                   </div>
                   <div className="form-block">
-                    <div className="form-block-label">Yearly Data (Year over Year)</div>
+                    <div className="form-block-label">Yearly Data</div>
                     <div className="year-tabs">
                       {yearlyData.map((y,i)=>(
                         <button key={i} className={`year-tab ${activeYear===i?"active":""}`} onClick={()=>setActiveYear(i)}>FY {y.year}</button>
                       ))}
-                      <button className="add-year-btn" onClick={addYear}>+ Add New Year</button>
+                      <button className="add-year-btn" onClick={addYear}>+ Add Year</button>
                     </div>
                     {yearlyData.map((y,i)=>i!==activeYear?null:(
                       <div key={i} className="form-grid">
@@ -2535,9 +2526,9 @@ Summary: ${result.summary}`;
 
               {/* Top action bar */}
               <div className="results-topbar">
-                <button className="btn-back" onClick={()=>setView("form")}>← Go Back</button>
+                <button className="btn-back" onClick={()=>setView("form")}>← Back</button>
                 <button className="btn-pdf" onClick={downloadPDF} disabled={downloading}>
-                  {downloading?"Generating...":"↓ Download PDF Report"}
+                  {downloading?"Generating...":"↓ PDF Report"}
                 </button>
                 <button className="btn-copy" onClick={copySummary}>⧉ Copy Summary</button>
               </div>
@@ -2653,11 +2644,6 @@ Summary: ${result.summary}`;
                       <PolarGrid stroke="rgba(255,255,255,0.06)"/>
                       <PolarAngleAxis dataKey="subject" tick={{fill:"#475569",fontSize:10,fontFamily:"Geist Mono"}}/>
                       <Radar dataKey="value" stroke={gColor} fill={gColor} fillOpacity={0.1} strokeWidth={1.5}/>
-                      <Tooltip 
-                        contentStyle={{background:"rgba(8,8,16,0.95)",border:"1px solid rgba(255,255,255,0.08)",borderRadius:8,fontFamily:"Geist Mono",fontSize:11}}
-                        itemStyle={{color: '#f1f5f9'}}
-                        labelStyle={{color: '#94a3b8'}}
-                      />
                     </RadarChart>
                   </ResponsiveContainer>
                 </div>
@@ -2668,12 +2654,7 @@ Summary: ${result.summary}`;
                     <BarChart data={barData} barSize={22}>
                       <XAxis dataKey="name" tick={{fill:"#475569",fontSize:10,fontFamily:"Geist Mono"}} axisLine={false} tickLine={false}/>
                       <YAxis domain={[0,100]} tick={{fill:"#475569",fontSize:10,fontFamily:"Geist Mono"}} axisLine={false} tickLine={false}/>
-                      <Tooltip 
-                        contentStyle={{background:"rgba(8,8,16,0.95)",border:"1px solid rgba(255,255,255,0.08)",borderRadius:8,fontFamily:"Geist Mono",fontSize:11}} 
-                        itemStyle={{color: '#f1f5f9'}}
-                        labelStyle={{color: '#94a3b8'}}
-                        cursor={{fill:"rgba(255,255,255,0.02)"}}
-                      />
+                      <Tooltip contentStyle={{background:"rgba(8,8,16,0.95)",border:"1px solid rgba(255,255,255,0.08)",borderRadius:8,fontFamily:"Geist Mono",fontSize:11}} cursor={{fill:"rgba(255,255,255,0.02)"}}/>
                       <Bar dataKey="score" radius={[3,3,0,0]}>
                         {barData.map((e,i)=><Cell key={i} fill={barCol(e.score)}/>)}
                       </Bar>
@@ -2684,7 +2665,7 @@ Summary: ${result.summary}`;
                 <div className="bento-card">
                   <div className="card-label"><div className="card-label-dot" style={{background:"#8b5cf6"}}/>SHAP Attribution</div>
                   <div style={{fontSize:11,color:"#475569",marginBottom:12,lineHeight:1.5}}>
-                    Score = {result.totalScore}/100. Each bar shows contribution relative to a base of 50.
+                    Score = {result.totalScore}/100. Each bar = contribution relative to baseline of 50.
                   </div>
                   {(result.shapValues||[]).map((sv,i)=>{
                     const isPos=sv.contribution>=0;
@@ -2744,7 +2725,7 @@ Summary: ${result.summary}`;
                   <div className="section-divider">12-Month Forecast</div>
                   <div className="bento-card span3" style={{padding:24,marginBottom:14}}>
                     <div className="card-label"><div className="card-label-dot" style={{background:"#fb923c"}}/>Financial Health Trajectory</div>
-                    <div style={{fontSize:11,color:"#475569",marginBottom:16}}>Historical + Groq-projected scores with confidence bands</div>
+                    <div style={{fontSize:11,color:"#475569",marginBottom:16}}>Historical + Groq-projected scores with widening confidence bands</div>
                     <ResponsiveContainer width="100%" height={220}>
                       <AreaChart data={result.forecastData} margin={{top:10,right:10,left:-20,bottom:0}}>
                         <defs>
@@ -2756,11 +2737,7 @@ Summary: ${result.summary}`;
                         <CartesianGrid stroke="rgba(255,255,255,0.04)" strokeDasharray="3 3" vertical={false}/>
                         <XAxis dataKey="period" tick={{fill:"#475569",fontSize:10,fontFamily:"Geist Mono"}} axisLine={false} tickLine={false}/>
                         <YAxis domain={[0,100]} tick={{fill:"#475569",fontSize:10,fontFamily:"Geist Mono"}} axisLine={false} tickLine={false}/>
-                        <Tooltip 
-                          contentStyle={{background:"rgba(8,8,16,0.95)",border:"1px solid rgba(255,255,255,0.08)",borderRadius:8,fontFamily:"Geist Mono",fontSize:11}}
-                          itemStyle={{color: '#f1f5f9'}}
-                          labelStyle={{color: '#94a3b8'}}
-                        />
+                        <Tooltip contentStyle={{background:"rgba(8,8,16,0.95)",border:"1px solid rgba(255,255,255,0.08)",borderRadius:8,fontFamily:"Geist Mono",fontSize:11}}/>
                         <ReferenceLine y={65} stroke="#2dd4bf" strokeDasharray="4 4" strokeOpacity={0.3}/>
                         <ReferenceLine y={45} stroke="#f87171" strokeDasharray="4 4" strokeOpacity={0.25}/>
                         <Area type="monotone" dataKey="confidence_hi" stroke="none" fill="url(#cg)"/>
@@ -2776,8 +2753,8 @@ Summary: ${result.summary}`;
                       </AreaChart>
                     </ResponsiveContainer>
                     <div className="forecast-note">
-                      <span style={{color:gColor}}>● Historical Data</span>
-                      <span>● <span>Groq Forecast</span></span>
+                      <span style={{color:gColor}}>● Historical</span>
+                      <span>● <span>Groq Forecasted</span></span>
                       <span style={{opacity:0.5}}>Shaded = confidence band</span>
                     </div>
                   </div>
@@ -2787,7 +2764,7 @@ Summary: ${result.summary}`;
               {/* ── Recommendations ── */}
               {result.recommendations?.length>0 && (
                 <>
-                  <div className="section-divider">Priority Actions (Recommendations)</div>
+                  <div className="section-divider">Actionable Recommendations</div>
                   <div className="bento-card" style={{padding:24,marginBottom:14}}>
                     <div className="card-label"><div className="card-label-dot" style={{background:"#f87171"}}/>Priority Actions</div>
                     <RecommendationsSection recommendations={result.recommendations}/>
