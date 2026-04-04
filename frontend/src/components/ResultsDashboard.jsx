@@ -392,9 +392,20 @@ const dashStyles = `
     background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.3);
     color: var(--emerald); padding: 10px 20px; border-radius: 30px;
     font-family: var(--font-mono); font-size: 12px;
-    transition: transform 0.3s; z-index: 300;
+    transition: all 0.3s ease; z-index: 300;
+    
+    /* Add these lines to completely hide it */
+    opacity: 0; 
+    visibility: hidden; 
+    pointer-events: none;
   }
-  .copy-toast.show { transform: translateX(-50%) translateY(0); }
+  .copy-toast.show { 
+    transform: translateX(-50%) translateY(0); 
+    
+    /* Add these lines to show it */
+    opacity: 1; 
+    visibility: visible; 
+  }
 `;
 
 // ── Benchmark rows ──────────────────────────────────────────────────────────

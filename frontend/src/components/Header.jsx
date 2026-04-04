@@ -92,6 +92,20 @@ const headerStyles = `
     background: currentColor;
     animation: blink 2s infinite;
   }
+
+  /* Mobile Responsiveness */
+  @media (max-width: 600px) {
+    .header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 16px 24px;
+    }
+    .header-right {
+      width: 100%;
+      justify-content: flex-start;
+    }
+  }
 `;
 
 export default function Header({ apiStatus }) {
