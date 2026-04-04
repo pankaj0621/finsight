@@ -3,6 +3,7 @@
 #  AI-Driven Financial Health Scoring for SMEs
 #  Document extraction: PyMuPDF (PDF) + Tesseract (scanned) + pandas (Excel/CSV)
 #  AI analysis: Groq (llama-3.3-70b-versatile) — Free & Fast
+#  UPDATED: Added endpoints & logic for V4 UI (Simulator, Chat, Benchmarks)
 # =============================================================================
 
 import os
@@ -15,7 +16,7 @@ from fastapi import FastAPI, HTTPException, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 from dotenv import load_dotenv
 
 # ---------------------------------------------------------------------------
@@ -70,14 +71,14 @@ except ImportError:
 # =============================================================================
 app = FastAPI(
     title="FinSight API",
-    version="2.0.0",
+    version="4.0.0",
     description="AI-powered financial health scoring for SMEs using Groq LLaMA.",
 )
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://finsight-brown-mu.vercel.app", # Apna Vercel URL yahan dalein
+        "https://finsight-brown-mu.vercel.app", 
         "http://localhost:5173",
         "http://localhost:3000",
     ],
@@ -101,7 +102,7 @@ class FinancialData(BaseModel):
     currentAssets: float
     currentLiabilities: float
     inventory: Optional[float] = 0.0
-    operatingExpenses: Optional[float] = None
+    operatingExpenses: Optional[float] = 0.0
 
 
 class YearlyEntry(BaseModel):
@@ -126,6 +127,19 @@ class ReportRequest(BaseModel):
     formData: dict
     charts: Optional[dict] = None
 
+# --- New Schemas for Frontend Features ---
+class ScenarioData(BaseModel):
+    revenueChange: float
+    expenseChange: float
+    debtChange: float
+
+class SimulateRequest(BaseModel):
+    financialData: FinancialData
+    scenarios: ScenarioData
+
+class ChatRequest(BaseModel):
+    message: str
+    analysisContext: Dict[str, Any]
 
 # =============================================================================
 # PDF Generator Class
@@ -135,33 +149,15 @@ if FPDF_AVAILABLE:
     class FinSightPDF(FPDF):
 
         def clean(self, text: str) -> str:
-            """
-            Replace all unicode characters that latin-1 / Helvetica cannot encode.
-            This prevents FPDFUnicodeEncodingException from Groq AI text.
-            """
             replacements = {
-                '\u2013': '-',   # en dash
-                '\u2014': '-',   # em dash
-                '\u2015': '-',   # horizontal bar
-                '\u2018': "'",   # left single quote
-                '\u2019': "'",   # right single quote
-                '\u201a': ',',   # single low-9 quotation
-                '\u201c': '"',   # left double quote
-                '\u201d': '"',   # right double quote
-                '\u201e': '"',   # double low-9 quotation
-                '\u2022': '*',   # bullet
-                '\u2026': '...', # ellipsis
-                '\u2032': "'",   # prime
-                '\u2033': '"',   # double prime
-                '\u00b7': '*',   # middle dot
-                '\u00e2': 'a',   # a with circumflex
-                '\u20ac': 'EUR', # euro sign
-                '\u00a0': ' ',   # non-breaking space
+                '\u2013': '-', '\u2014': '-', '\u2015': '-', '\u2018': "'", '\u2019': "'",
+                '\u201a': ',', '\u201c': '"', '\u201d': '"', '\u201e': '"', '\u2022': '*',
+                '\u2026': '...', '\u2032': "'", '\u2033': '"', '\u00b7': '*', '\u00e2': 'a',
+                '\u20ac': 'EUR', '\u00a0': ' ',
             }
             s = str(text)
             for char, rep in replacements.items():
                 s = s.replace(char, rep)
-            # Final safety: encode to latin-1, replacing any remaining unknowns
             return s.encode('latin-1', 'replace').decode('latin-1')
 
         def header(self):
@@ -242,6 +238,11 @@ def compute_ratios(d: FinancialData) -> dict:
     inventory    = d.inventory or 0
     op_expenses  = d.operatingExpenses or (revenue * 0.8)
 
+    # Naye metrics frontend ke liye (Working Capital, EBITDA Margin, Burn Rate)
+    working_capital = d.currentAssets - current_liab
+    ebitda_proxy = d.netProfit + (op_expenses * 0.1) # Proxy estimation
+    burn_rate = op_expenses / 12 if op_expenses > 0 else 0
+
     return {
         "currentRatio":    round(d.currentAssets / current_liab, 2),
         "quickRatio":      round((d.currentAssets - inventory) / current_liab, 2),
@@ -251,6 +252,10 @@ def compute_ratios(d: FinancialData) -> dict:
         "assetTurnover":   round(revenue / total_assets, 2),
         "equityRatio":     round((total_assets - total_liab) / total_assets, 3),
         "expenseRatio":    round((op_expenses / revenue) * 100, 1),
+        # Extra metrics
+        "ebitdaMargin":    round((ebitda_proxy / revenue) * 100, 1),
+        "workingCapital":  f"₹{int(working_capital):,}",
+        "burnRate":        f"₹{int(burn_rate):,}/mo"
     }
 
 
@@ -294,11 +299,11 @@ def compute_altman_z(d: FinancialData) -> dict:
     z = round(0.717*x1 + 0.847*x2 + 3.107*x3 + 0.420*x4 + 0.998*x5, 2)
 
     if z >= 2.9:
-        zone, color = "Safe Zone", "#c8f542"
+        zone, color = "Safe Zone", "#a3e635"
     elif z >= 1.23:
-        zone, color = "Grey Zone", "#f5a742"
+        zone, color = "Grey Zone", "#fb923c"
     else:
-        zone, color = "Distress Zone", "#f54242"
+        zone, color = "Distress Zone", "#f87171"
 
     percent = min(100, max(0, ((z + 1) / 5) * 100))
     return {"Z": z, "zone": zone, "zoneColor": color, "percent": round(percent, 1)}
@@ -357,6 +362,72 @@ def generate_forecast(yearly_data: list, scores: dict) -> list:
         prev = nxt
 
     return historical + forecast
+
+# --- Frontend Benchmarks Generate karne ka logic ---
+def generate_benchmarks(ratios: dict, industry: str) -> dict:
+    avgs = {
+        "Technology":    {"currentRatio": 1.8, "quickRatio": 1.5, "debtRatio": 30.0, "netProfitMargin": 18.0, "revenueGrowth": 25.0, "assetTurnover": 1.2},
+        "Manufacturing": {"currentRatio": 1.4, "quickRatio": 0.9, "debtRatio": 50.0, "netProfitMargin": 8.0,  "revenueGrowth": 8.0,  "assetTurnover": 0.8},
+        "Retail":        {"currentRatio": 1.2, "quickRatio": 0.6, "debtRatio": 45.0, "netProfitMargin": 5.0,  "revenueGrowth": 10.0, "assetTurnover": 1.8},
+    }
+    ind_avg = avgs.get(industry, {"currentRatio": 1.5, "quickRatio": 1.0, "debtRatio": 40.0, "netProfitMargin": 12.0, "revenueGrowth": 12.0, "assetTurnover": 1.0})
+    
+    benchmarks = {}
+    for key, avg in ind_avg.items():
+        yours = ratios.get(key, 0)
+        if key == "debtRatio":
+            status = "better" if yours < avg * 0.9 else "worse" if yours > avg * 1.1 else "onpar"
+        else:
+            status = "better" if yours > avg * 1.1 else "worse" if yours < avg * 0.9 else "onpar"
+        benchmarks[key] = {"yours": yours, "industry": avg, "status": status}
+    return benchmarks
+
+# --- Frontend Recommendations Generate karne ka logic ---
+def generate_recommendations(scores: dict, ratios: dict) -> list:
+    recs = []
+    
+    if scores["liquidity"] < 50:
+        recs.append({
+            "priority": "high", "action": "Improve Working Capital",
+            "detail": f"Your current ratio is {ratios['currentRatio']}, which is below the safe threshold of 1.5. Focus on converting short-term assets to cash or reducing short-term liabilities.",
+            "impact": "Boosts Liquidity Score by ~20 pts"
+        })
+    elif scores["liquidity"] < 80:
+        recs.append({
+            "priority": "medium", "action": "Optimize Inventory Flow",
+            "detail": "Liquidity is stable, but optimizing inventory turnover will improve cash flow further.",
+            "impact": "Improves Quick Ratio"
+        })
+        
+    if scores["debtHealth"] < 50:
+        recs.append({
+            "priority": "high", "action": "Restructure High-Interest Debt",
+            "detail": f"Debt ratio is {ratios['debtRatio']}%. Strategize to bring this below 40% to reduce interest burden and bankruptcy risk.",
+            "impact": "Reduces Bankruptcy Risk significantly"
+        })
+        
+    if scores["profitability"] < 60:
+        recs.append({
+            "priority": "medium", "action": "Reduce Operating Expenses",
+            "detail": f"Net profit margin is only {ratios['netProfitMargin']}%. Analyze fixed costs and target a 10-15% reduction.",
+            "impact": "Increases Net Margin by 3-5%"
+        })
+        
+    if scores["growth"] >= 80:
+        recs.append({
+            "priority": "low", "action": "Explore Expansion Opportunities",
+            "detail": "Strong revenue growth detected. This is a favorable time to invest in new markets or product lines.",
+            "impact": "Sustains long-term growth trajectory"
+        })
+        
+    if len(recs) == 0:
+        recs.append({
+            "priority": "low", "action": "Maintain Current Strategy",
+            "detail": "All key financial metrics are highly robust. Continue building cash reserves.",
+            "impact": "Maintains Grade A standing"
+        })
+        
+    return sorted(recs, key=lambda x: 0 if x["priority"] == "high" else 1 if x["priority"] == "medium" else 2)
 
 
 # =============================================================================
@@ -507,7 +578,7 @@ Use only simple ASCII characters in your response - avoid dashes like - or -- us
 def root():
     return {
         "status": "FinSight API is running",
-        "version": "2.0.0",
+        "version": "4.0.0",
         "ai_engine": f"Groq {GROQ_MODEL}",
         "groq_ready": groq_client is not None,
         "ocr_engines": {
@@ -516,7 +587,6 @@ def root():
             "pandas":    PANDAS_AVAILABLE,
         },
     }
-
 
 @app.get("/health")
 def health():
@@ -536,9 +606,15 @@ async def analyze(req: AnalyzeRequest):
     altman   = compute_altman_z(d)
     shap     = compute_shap(scores, total)
     forecast = generate_forecast(req.yearlyData or [], scores)
+    
+    benchmarks = generate_benchmarks(ratios, d.industry)
+    recommendations = generate_recommendations(scores, ratios)
+    
     ai_data  = groq_analyze(d, ratios, altman, round(total), grade)
 
     return {
+        "companyName":       d.companyName,
+        "industry":          d.industry,
         "totalScore":        round(total),
         "grade":             grade,
         "riskLevel":         risk,
@@ -550,20 +626,93 @@ async def analyze(req: AnalyzeRequest):
             "netProfitMargin": f"{ratios['netProfitMargin']}%",
             "revenueGrowth":   f"{ratios['revenueGrowth']}%",
             "assetTurnover":   str(ratios["assetTurnover"]),
+            "ebitdaMargin":    f"{ratios['ebitdaMargin']}%",
+            "workingCapital":  str(ratios["workingCapital"]),
+            "burnRate":        str(ratios["burnRate"]),
         },
         "scores":            scores,
         "altman":            altman,
         "shapValues":        shap,
         "forecastData":      forecast,
+        "benchmarks":        benchmarks,
+        "recommendations":   recommendations,
         "summary":           ai_data.get("summary", ""),
         "insights":          ai_data.get("insights", []),
         "bankruptcyRisk":    ai_data.get("bankruptcyRisk", ""),
         "investmentVerdict": ai_data.get("investmentVerdict", ""),
     }
 
+# --- NEW ENDPOINT: Scenario Simulator ---
+@app.post("/api/simulate")
+async def simulate(req: SimulateRequest):
+    d = req.financialData
+    scen = req.scenarios
+    
+    sim_revenue = d.revenue * (1 + scen.revenueChange / 100)
+    sim_expenses = d.operatingExpenses * (1 + scen.expenseChange / 100) if d.operatingExpenses else 0
+    sim_net_profit = d.netProfit + (sim_revenue - d.revenue) - (sim_expenses - (d.operatingExpenses or 0))
+    sim_liab = d.totalLiabilities * (1 + scen.debtChange / 100)
+    
+    sim_d = FinancialData(
+        companyName=d.companyName,
+        industry=d.industry,
+        revenue=sim_revenue,
+        prevRevenue=d.prevRevenue,
+        netProfit=sim_net_profit,
+        totalAssets=d.totalAssets,
+        totalLiabilities=sim_liab,
+        currentAssets=d.currentAssets,
+        currentLiabilities=d.currentLiabilities,
+        inventory=d.inventory,
+        operatingExpenses=sim_expenses
+    )
+    
+    ratios = compute_ratios(sim_d)
+    scores = compute_scores(ratios)
+    total = compute_total(scores)
+    grade = "A" if total >= 80 else "B" if total >= 65 else "C" if total >= 45 else "D"
+    equity = (sim_d.totalAssets - sim_d.totalLiabilities) / (sim_d.totalAssets or 1)
+    invest = min(100, round(total * 0.9 + equity * 10))
+    
+    return {
+        "totalScore": round(total),
+        "grade": grade,
+        "investScore": invest,
+        "metrics": {
+            "currentRatio": str(ratios["currentRatio"]),
+            "debtRatio": f"{ratios['debtRatio']}%",
+            "netProfitMargin": f"{ratios['netProfitMargin']}%",
+        }
+    }
+
+# --- NEW ENDPOINT: AI Chat Widget ---
+@app.post("/api/chat")
+async def chat(req: ChatRequest):
+    if not groq_client:
+        return {"answer": "AI is currently offline. Please configure Groq API Key in your backend."}
+        
+    context_str = json.dumps(req.analysisContext)
+    prompt = f"""You are an expert AI Financial Advisor integrated into the FinSight app. 
+You are currently chatting directly with the user about their company's financial report. 
+Here is the context of their financial data: {context_str}
+
+User's Message/Question: {req.message}
+
+Respond concisely, professionally, and directly reference their specific financial numbers where applicable. Limit your response to 2-3 short sentences for quick reading."""
+
+    try:
+        response = groq_client.chat.completions.create(
+            model=GROQ_MODEL,
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.5,
+        )
+        return {"answer": response.choices[0].message.content.strip()}
+    except Exception as e:
+        return {"answer": f"Sorry, I encountered an error while analyzing your data. ({str(e)})"}
+
 
 # =============================================================================
-# PDF Report Generator — clean() used everywhere to prevent unicode errors
+# PDF Report Generator — ALL ORIGINAL SECTIONS RETAINED + RECOMMENDATIONS ADDED
 # =============================================================================
 @app.post("/api/generate-report")
 async def generate_report(req: ReportRequest):
@@ -650,6 +799,9 @@ async def generate_report(req: ReportRequest):
         "netProfitMargin": "Net Profit Margin",
         "revenueGrowth":   "Revenue Growth (YoY)",
         "assetTurnover":   "Asset Turnover",
+        "ebitdaMargin":    "EBITDA Margin",
+        "workingCapital":  "Working Capital",
+        "burnRate":        "Monthly Burn Rate"
     }
     fill = False
     for key, val in res.get("metrics", {}).items():
@@ -713,8 +865,8 @@ async def generate_report(req: ReportRequest):
     z_pct = altman.get("percent", 50)
     pdf.set_fill_color(220, 220, 220)
     pdf.rect(20, pdf.get_y() + 2, 170, 8, "F")
-    bar_color = (80, 150, 10) if altman.get("zone") == "Safe Zone" else \
-                (200, 120, 10) if altman.get("zone") == "Grey Zone" else (200, 40, 40)
+    bar_color = (163, 230, 53) if altman.get("zone") == "Safe Zone" else \
+                (251, 146, 60) if altman.get("zone") == "Grey Zone" else (248, 113, 113)
     pdf.set_fill_color(*bar_color)
     pdf.rect(20, pdf.get_y() + 2, max(4, 170 * z_pct / 100), 8, "F")
     pdf.ln(14)
@@ -757,10 +909,31 @@ async def generate_report(req: ReportRequest):
         pdf.multi_cell(0, 5, f"  {pdf.clean(ins.get('text', ''))}")
         pdf.ln(3)
     pdf.ln(4)
+    
+    # ── 11. Recommendations (NEW) ─────────────────────────────────────────────
+    recs = res.get("recommendations", [])
+    if recs:
+        pdf.section_header("PRIORITY ACTION PLAN")
+        for rec in recs:
+            pdf.set_font("Helvetica", "B", 10)
+            if rec["priority"] == "high":
+                pdf.set_text_color(220, 60, 60)
+            elif rec["priority"] == "medium":
+                pdf.set_text_color(220, 120, 20)
+            else:
+                pdf.set_text_color(60, 140, 10)
+            
+            pdf.cell(0, 7, f"[{rec['priority'].upper()}] {pdf.clean(rec['action'])}", ln=True)
+            pdf.set_font("Helvetica", "", 10)
+            pdf.set_text_color(60, 60, 60)
+            pdf.multi_cell(0, 5, f"Detail: {pdf.clean(rec['detail'])}")
+            pdf.ln(3)
+        pdf.ln(4)
 
-    # ── 11. Forecast Table ────────────────────────────────────────────────────
+    # ── 12. Forecast Table ────────────────────────────────────────────────────
     forecast_data = res.get("forecastData", [])
     if forecast_data:
+        pdf.add_page()
         pdf.section_header("12-MONTH HEALTH SCORE FORECAST")
         pdf.set_font("Helvetica", "B", 9)
         pdf.set_fill_color(220, 220, 220)
