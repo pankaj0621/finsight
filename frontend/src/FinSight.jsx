@@ -1,7 +1,7 @@
 // =============================================================================
-//  FinSight v4.0 — NEXT-GEN FINTECH UI (Hindi Latin Version)
+//  FinSight v4.0 — NEXT-GEN FINTECH UI (English Version)
 //  Cyber-Minimalist · Bento Grid · Glassmorphism · Dynamic Grade Glow
-//  Design ko fix kiya gaya hai taaki text black na dikhe (Mobile Navbar Fixed)
+//  Design fixed so text isn't black (Mobile Navbar Fixed)
 // =============================================================================
 
 import { useState, useEffect, useRef } from "react";
@@ -12,11 +12,11 @@ import {
   ReferenceLine, Area, AreaChart, CartesianGrid, Line,
 } from "recharts";
 
-// API ka base URL set karein
+// Set API base URL
 const API_BASE = import.meta.env.VITE_API_URL || "https://finsight-backend-f0pq.onrender.com";
 
 // =============================================================================
-// Fonts aur Global CSS — Design aur Colors
+// Fonts and Global CSS — Design and Colors
 // =============================================================================
 const FONTS = `
   @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,700&family=Inter:wght@300;400;500;600&family=Geist+Mono:wght@300;400;500;600&display=swap');
@@ -73,7 +73,7 @@ const styles = `
     overflow-x: hidden;
   }
 
-  /* Browser ke default button color ko fix karein taaki black text na aaye */
+  /* Fix browser default button color so black text doesn't appear */
   button {
     font-family: inherit;
     color: var(--text); 
@@ -153,7 +153,7 @@ const styles = `
   }
 
   /* ════════════════════════════════════════════
-     HEADER (Upar ka hissa)
+     HEADER (Top section)
   ════════════════════════════════════════════ */
   .header {
     display: flex;
@@ -318,7 +318,7 @@ const styles = `
   }
 
   /* ════════════════════════════════════════════
-     FORM SECTION (Data dalne ka form)
+     FORM SECTION (Data input form)
   ════════════════════════════════════════════ */
   .form-wrap {
     padding-bottom: 80px;
@@ -513,7 +513,7 @@ const styles = `
   }
 
   /* ════════════════════════════════════════════
-     UPLOAD ZONE (File dalne ki jagah)
+     UPLOAD ZONE (File drop area)
   ════════════════════════════════════════════ */
   .upload-zone {
     border: 2px dashed rgba(255,255,255,0.08);
@@ -647,7 +647,7 @@ const styles = `
   .add-year-btn:hover { border-color: var(--teal); color: var(--teal); }
 
   /* ════════════════════════════════════════════
-     LOADING (Intezaar ki screen)
+     LOADING (Waiting screen)
   ════════════════════════════════════════════ */
   .loading-wrap {
     display: flex;
@@ -1521,7 +1521,7 @@ const styles = `
   }
 
   /* ════════════════════════════════════════════
-     RECOMMENDATIONS (Zaroori Kadam)
+     RECOMMENDATIONS (Priority Actions)
   ════════════════════════════════════════════ */
   .rec-item {
     background: rgba(255,255,255,0.02);
@@ -1777,7 +1777,7 @@ const styles = `
   .chat-send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
   /* ════════════════════════════════════════════
-     MOBILE BOTTOM NAV (Yahan text gayab ho jata tha)
+     MOBILE BOTTOM NAV (Text was disappearing here)
   ════════════════════════════════════════════ */
   .mobile-nav {
     display: none;
@@ -1798,7 +1798,7 @@ const styles = `
     .chat-panel { bottom: 140px; }
   }
 
-  /* Is jagah var(--text2) miss hone ki wajah se default black text aa raha tha */
+  /* Default black text was appearing here due to missing var(--text2) */
   .mobile-nav-btn {
     display: flex;
     flex-direction: column;
@@ -1906,10 +1906,10 @@ const DEMOS = {
   "Growth Stage":  {companyName:"NovaSpark Solutions",industry:"Technology",revenue:"8500000",prevRevenue:"5000000",netProfit:"420000",totalAssets:"12000000",totalLiabilities:"5500000",currentAssets:"4800000",currentLiabilities:"2200000",inventory:"600000",operatingExpenses:"7200000"},
 };
 const EMPTY_FORM = {companyName:"",industry:"General",revenue:"",prevRevenue:"",netProfit:"",totalAssets:"",totalLiabilities:"",currentAssets:"",currentLiabilities:"",inventory:"",operatingExpenses:""};
-const LOADING_STEPS = ["FINANCIAL DATA PARSE HO RAHA HAI...","ALTMAN Z-SCORE COMPUTE HO RAHA HAI...","SCORING ENGINE CHAL RAHA HAI...","SHAP ATTRIBUTIONS NIKALE JAA RAHE HAIN...","GROQ AI KO CALL KIYA JAA RAHA HAI...","FORECAST TRAJECTORY BANAYI JAA RAHI HAI..."];
+const LOADING_STEPS = ["PARSING FINANCIAL DATA...","COMPUTING ALTMAN Z-SCORE...","RUNNING SCORING ENGINE...","EXTRACTING SHAP ATTRIBUTIONS...","CALLING GROQ AI...","BUILDING FORECAST TRAJECTORY..."];
 const INDUSTRIES = ["Technology","Manufacturing","Retail","Healthcare","Finance","Real Estate","Education","General"];
 const BENCH_LABELS = {currentRatio:"Current Ratio",quickRatio:"Quick Ratio",debtRatio:"Debt Ratio",netProfitMargin:"Net Margin",revenueGrowth:"Revenue Growth",assetTurnover:"Asset Turnover"};
-const QUICK_QUESTIONS = ["Mera score aisa kyun hai?","Debt (karz) kaise kam karein?","Kya meri growth healthy hai?","Mera sabse bada risk kya hai?"];
+const QUICK_QUESTIONS = ["Why is my score like this?","How to reduce debt?","Is my growth healthy?","What is my biggest risk?"];
 
 // =============================================================================
 // Grade color helper
@@ -1934,7 +1934,7 @@ function BenchmarkSection({ benchmarks, industry }) {
             <div className="benchmark-name">{BENCH_LABELS[key]||key}</div>
             <div className="benchmark-bars-wrap">
               <div className="bm-row">
-                <div className="bm-who" style={{color:"#a3e635"}}>Aap</div>
+                <div className="bm-who" style={{color:"#a3e635"}}>You</div>
                 <div className="bm-track"><div className="bm-fill" style={{width:getPct(data.yours,max)+"%",background:"#a3e635"}}/></div>
                 <div className="bm-val">{data.yours}</div>
               </div>
@@ -1945,7 +1945,7 @@ function BenchmarkSection({ benchmarks, industry }) {
               </div>
             </div>
             <div className={`bm-status ${st==="better"?"bm-better":st==="onpar"?"bm-onpar":"bm-worse"}`}>
-              {st==="better"?"▲ BEHTAR":st==="onpar"?"≈ BARABAR":"▼ NEECHE"}
+              {st==="better"?"▲ BETTER":st==="onpar"?"≈ ON PAR":"▼ WORSE"}
             </div>
           </div>
         );
@@ -2022,8 +2022,8 @@ function SimulationSection({ originalResult, originalForm }) {
 
   return (
     <div className="sim-panel">
-      <div className="sim-title"><div className="sim-title-icon"/>SCENARIO SIMULATOR (BADLAAV DEKHEIN)</div>
-      <div className="sim-subtitle">Sliders adjust karein aur dekhein ki business me badlaav se aapke financial score par kya asar padta hai.</div>
+      <div className="sim-title"><div className="sim-title-icon"/>SCENARIO SIMULATOR (SEE IMPACT)</div>
+      <div className="sim-subtitle">Adjust sliders to see how changes impact your financial score.</div>
       <div className="sim-sliders">
         {[
           {key:"revenueChange",  label:"Revenue Delta"},
@@ -2050,7 +2050,7 @@ function SimulationSection({ originalResult, originalForm }) {
         ))}
       </div>
       <button className="btn-simulate" onClick={runSim} disabled={simLoading}>
-        {simLoading?"CALCULATE HO RAHA HAI...":"▶ SIMULATION RUN KAREIN"}
+        {simLoading?"CALCULATING...":"▶ RUN SIMULATION"}
       </button>
       {simResult && (
         <div className="sim-result-grid">
@@ -2078,7 +2078,7 @@ function SimulationSection({ originalResult, originalForm }) {
 // Floating Chat Widget
 // =============================================================================
 function ChatWidget({ analysisContext, visible, onClose }) {
-  const [messages,    setMessages]    = useState([{role:"ai",text:"Namaste! Main FinSight AI hoon. Apni company ki financial health ke baare mein kuch bhi poochhein."}]);
+  const [messages,    setMessages]    = useState([{role:"ai",text:"Hello! I am FinSight AI. Ask me anything about your company's financial health."}]);
   const [input,       setInput]       = useState("");
   const [chatLoading, setChatLoading] = useState(false);
   const endRef = useRef(null);
@@ -2098,9 +2098,9 @@ function ChatWidget({ analysisContext, visible, onClose }) {
         body:JSON.stringify({message:msg, analysisContext}),
       });
       const data = await res.json();
-      setMessages(m=>[...m,{role:"ai",text:data.answer||"Maaf karein, process nahi ho paaya."}]);
+      setMessages(m=>[...m,{role:"ai",text:data.answer||"Sorry, unable to process."}]);
     } catch(e) {
-      setMessages(m=>[...m,{role:"ai",text:"Connection error aa gaya hai. Phir se koshish karein."}]);
+      setMessages(m=>[...m,{role:"ai",text:"Connection error occurred. Please try again."}]);
     } finally {
       setChatLoading(false);
     }
@@ -2122,7 +2122,7 @@ function ChatWidget({ analysisContext, visible, onClose }) {
         {messages.map((m,i)=>(
           <div className={`chat-msg ${m.role}`} key={i}>{m.text}</div>
         ))}
-        {chatLoading && <div className="chat-msg ai loading">Soch raha hoon...</div>}
+        {chatLoading && <div className="chat-msg ai loading">Thinking...</div>}
         <div ref={endRef}/>
       </div>
       <div className="chat-quick-btns">
@@ -2133,14 +2133,14 @@ function ChatWidget({ analysisContext, visible, onClose }) {
       <div className="chat-input-wrap">
         <input
           className="chat-input-field"
-          placeholder="Apne finances ke baare me poochhein..."
+          placeholder="Ask about your finances..."
           value={input}
           onChange={e=>setInput(e.target.value)}
           onKeyDown={e=>e.key==="Enter"&&!chatLoading&&send()}
           disabled={chatLoading}
         />
         <button className="chat-send-btn" onClick={()=>send()} disabled={chatLoading||!input.trim()}>
-          {chatLoading?"...":"BHEJEIN"}
+          {chatLoading?"...":"SEND"}
         </button>
       </div>
     </div>
@@ -2148,7 +2148,7 @@ function ChatWidget({ analysisContext, visible, onClose }) {
 }
 
 // =============================================================================
-// Main Component (Mukhya Hissa)
+// Main Component
 // =============================================================================
 export default function FinSight() {
   const [view,        setView]        = useState("form");
@@ -2201,7 +2201,7 @@ export default function FinSight() {
     }catch(e){
       clearInterval(tick);
       setUploadState({status:"error",progress:0,extracted:null});
-      setError(`Extraction fail ho gayi: ${e.message}`);
+      setError(`Extraction failed: ${e.message}`);
     }
   };
 
@@ -2242,7 +2242,7 @@ export default function FinSight() {
       setTimeout(()=>setView("result"),300);
     }catch(e){
       clearInterval(si);
-      setError(`Analysis fail ho gaya: ${e.message}`);
+      setError(`Analysis failed: ${e.message}`);
       setView("form");
     }
   };
@@ -2266,7 +2266,7 @@ export default function FinSight() {
       a.href=url;a.download=`FinSight_Report_${af.companyName||"SME"}.pdf`;
       document.body.appendChild(a);a.click();a.remove();
     }catch(e){
-      alert(`PDF fail ho gaya: ${e.message}`);
+      alert(`PDF generation failed: ${e.message}`);
     }finally{setDownloading(false);}
   };
 
@@ -2352,7 +2352,7 @@ Summary: ${result.summary}`;
             <div className="header-right">
               <div className={`status-pill ${apiStatus==="ok"?"ok":"err"}`}>
                 <div className="status-dot"/>
-                {apiStatus==="ok"?"BACKEND LIVE (CHALU HAI)":apiStatus==="err"?"OFFLINE":"CONNECTING"}
+                {apiStatus==="ok"?"BACKEND LIVE":apiStatus==="err"?"OFFLINE":"CONNECTING"}
               </div>
             </div>
           </header>
@@ -2367,9 +2367,9 @@ Summary: ${result.summary}`;
             <div className="hero">
               <div className="hero-eyebrow">
                 <span style={{width:6,height:6,borderRadius:"50%",background:"#a3e635",flexShrink:0,display:"inline-block"}}/>
-                GROQ LLAMA 3.3 70B DWARA SANCHALIT
+                POWERED BY GROQ LLAMA 3.3 70B
               </div>
-              <h2>SMEs Ke Liye AI Financial<br/>Health <em>Intelligence</em></h2>
+              <h2>AI Financial<br/>Health <em>Intelligence</em> for SMEs</h2>
               <p className="hero-sub">Real-time scoring · Altman Z-Score · SHAP explainability · Scenario simulation · AI chat</p>
               <div className="hero-tags">
                 {["Groq LLaMA","Altman Z-Score","SHAP XAI","Industry Benchmarking","Scenario Sim","PDF Export"].map(t=>(
@@ -2389,7 +2389,7 @@ Summary: ${result.summary}`;
               <div className="mode-tabs">
                 {["manual","upload","multiyear"].map(m=>(
                   <button key={m} className={`mode-tab ${inputMode===m?"active":""}`} onClick={()=>setInputMode(m)}>
-                    {m==="manual"?"Manual Entry":m==="upload"?"Doc Upload Karein":"Multi-Year Data"}
+                    {m==="manual"?"Manual Entry":m==="upload"?"Upload Doc":"Multi-Year Data"}
                   </button>
                 ))}
               </div>
@@ -2412,20 +2412,20 @@ Summary: ${result.summary}`;
                   >
                     <input type="file" accept=".pdf,.xlsx,.xls,.csv" onChange={e=>handleFileUpload(e.target.files[0])}/>
                     <div className="upload-icon">📊</div>
-                    <h3>Yahan Financial Statement Drop Karein</h3>
-                    <p>PDF · Excel · CSV — AI sabhi fields automatically extract kar lega</p>
+                    <h3>Drop Financial Statement Here</h3>
+                    <p>PDF · Excel · CSV — AI will automatically extract all fields</p>
                     {uploadState.status!=="idle" && (
                       <>
                         <div className="upload-bar-track"><div className="upload-bar-fill" style={{width:uploadState.progress+"%"}}/></div>
                         <div className="upload-status">
-                          {uploadState.status==="processing"?"AI se extract ho raha hai...":uploadState.status==="done"?`✓ ${uploadState.extracted?.fieldsExtracted||0} fields extract ho gaye (${uploadState.extracted?.confidence||0}% confidence)`:uploadState.status==="error"?"✗ Extraction fail ho gaya":""}
+                          {uploadState.status==="processing"?"Extracting via AI...":uploadState.status==="done"?`✓ ${uploadState.extracted?.fieldsExtracted||0} fields extracted (${uploadState.extracted?.confidence||0}% confidence)`:uploadState.status==="error"?"✗ Extraction failed":""}
                         </div>
                       </>
                     )}
                   </div>
                   {uploadState.extracted && (
                     <div className="extracted-preview">
-                      <div className="extracted-preview-title">Extracted Financial Data — Analyze karne se pehle check karein</div>
+                      <div className="extracted-preview-title">Extracted Financial Data — Check before analyzing</div>
                       <div className="extracted-grid">
                         {Object.entries(uploadState.extracted).filter(([k])=>!["confidence","fieldsExtracted"].includes(k)).map(([k,v])=>(
                           <div className="extracted-item" key={k}>
@@ -2443,9 +2443,9 @@ Summary: ${result.summary}`;
               {inputMode==="manual" && (
                 <>
                   <div className="form-block">
-                    <div className="form-block-label">Company Ki Jaankari</div>
+                    <div className="form-block-label">Company Information</div>
                     <div className="form-grid">
-                      <div className="field"><label>COMPANY NAME</label><input placeholder="Jaise ki Acme Pvt Ltd" value={form.companyName} onChange={e=>set("companyName",e.target.value)}/></div>
+                      <div className="field"><label>COMPANY NAME</label><input placeholder="e.g. Acme Pvt Ltd" value={form.companyName} onChange={e=>set("companyName",e.target.value)}/></div>
                       <div className="field"><label>INDUSTRY</label><select value={form.industry} onChange={e=>set("industry",e.target.value)}>{INDUSTRIES.map(i=><option key={i}>{i}</option>)}</select></div>
                     </div>
                   </div>
@@ -2477,21 +2477,21 @@ Summary: ${result.summary}`;
                   <div className="form-block">
                     <div className="form-block-label">Company</div>
                     <div className="form-grid">
-                      <div className="field"><label>COMPANY NAME</label><input placeholder="Acme Pvt Ltd" value={form.companyName} onChange={e=>set("companyName",e.target.value)}/></div>
+                      <div className="field"><label>COMPANY NAME</label><input placeholder="e.g. Acme Pvt Ltd" value={form.companyName} onChange={e=>set("companyName",e.target.value)}/></div>
                       <div className="field"><label>INDUSTRY</label><select value={form.industry} onChange={e=>set("industry",e.target.value)}>{INDUSTRIES.map(i=><option key={i}>{i}</option>)}</select></div>
                     </div>
                   </div>
                   <div className="form-block">
-                    <div className="form-block-label">Yearly Data (Saal Dar Saal)</div>
+                    <div className="form-block-label">Yearly Data (Year over Year)</div>
                     <div className="year-tabs">
                       {yearlyData.map((y,i)=>(
                         <button key={i} className={`year-tab ${activeYear===i?"active":""}`} onClick={()=>setActiveYear(i)}>FY {y.year}</button>
                       ))}
-                      <button className="add-year-btn" onClick={addYear}>+ Naya Saal Jodein</button>
+                      <button className="add-year-btn" onClick={addYear}>+ Add New Year</button>
                     </div>
                     {yearlyData.map((y,i)=>i!==activeYear?null:(
                       <div key={i} className="form-grid">
-                        <div className="field"><label>YEAR (SAAL)</label><input placeholder="2024" value={y.year} onChange={e=>setYearField(i,"year",e.target.value)}/></div>
+                        <div className="field"><label>YEAR</label><input placeholder="2024" value={y.year} onChange={e=>setYearField(i,"year",e.target.value)}/></div>
                         <div className="field"><label>REVENUE</label><input type="number" value={y.revenue} onChange={e=>setYearField(i,"revenue",e.target.value)}/></div>
                         <div className="field"><label>NET PROFIT</label><input type="number" value={y.netProfit} onChange={e=>setYearField(i,"netProfit",e.target.value)}/></div>
                         <div className="field"><label>TOTAL ASSETS</label><input type="number" value={y.totalAssets} onChange={e=>setYearField(i,"totalAssets",e.target.value)}/></div>
@@ -2507,7 +2507,7 @@ Summary: ${result.summary}`;
               )}
 
               <button className="btn-cta" onClick={analyze} disabled={!canAnalyze}>
-                Financial Health Analyze Karein →
+                Analyze Financial Health →
               </button>
             </div>
           )}
@@ -2518,7 +2518,7 @@ Summary: ${result.summary}`;
           {view==="loading" && (
             <div className="loading-wrap">
               <div className="loader-ring"/>
-              <div className="loading-title">Financial Data Analyze Ho Raha Hai</div>
+              <div className="loading-title">Analyzing Financial Data</div>
               <div className="loading-steps">
                 {LOADING_STEPS.map((s,i)=>(
                   <div key={i} className={`loading-step ${i<loadingStep?"done":i===loadingStep?"active":""}`}>{s}</div>
@@ -2535,11 +2535,11 @@ Summary: ${result.summary}`;
 
               {/* Top action bar */}
               <div className="results-topbar">
-                <button className="btn-back" onClick={()=>setView("form")}>← Peeche Jayein</button>
+                <button className="btn-back" onClick={()=>setView("form")}>← Go Back</button>
                 <button className="btn-pdf" onClick={downloadPDF} disabled={downloading}>
-                  {downloading?"Ban Rahi Hai...":"↓ PDF Report Download Karein"}
+                  {downloading?"Generating...":"↓ Download PDF Report"}
                 </button>
-                <button className="btn-copy" onClick={copySummary}>⧉ Summary Copy Karein</button>
+                <button className="btn-copy" onClick={copySummary}>⧉ Copy Summary</button>
               </div>
 
               {/* ── Bento Row 1: Score · Altman · Investment ── */}
@@ -2576,7 +2576,7 @@ Summary: ${result.summary}`;
                     color:result.altman?.zoneColor
                   }}>{result.altman?.zone}</span>
                   <div className="altman-spectrum" style={{marginTop:"auto"}}>
-                    <div style={{fontFamily:"Geist Mono",fontSize:10,color:"#475569",letterSpacing:"0.08em",marginBottom:6}}>BANKRUPTCY PROBABILITY SPECTRUM (Diwaliya Hone Ki Sambhavna)</div>
+                    <div style={{fontFamily:"Geist Mono",fontSize:10,color:"#475569",letterSpacing:"0.08em",marginBottom:6}}>BANKRUPTCY PROBABILITY SPECTRUM</div>
                     <div className="altman-bar">
                       <div className="altman-bar-fill" style={{width:(result.altman?.percent||0)+"%"}}/>
                     </div>
@@ -2605,10 +2605,10 @@ Summary: ${result.summary}`;
                         background:result.investScore>=70?"linear-gradient(90deg,#a3e635,#65a30d)":result.investScore>=50?"linear-gradient(90deg,#2dd4bf,#0d9488)":"linear-gradient(90deg,#fb923c,#ea580c)"
                       }}/>
                     </div>
-                    <div className="invest-verdict">{result.investmentVerdict||"Pura analysis niche dekhein."}</div>
+                    <div className="invest-verdict">{result.investmentVerdict||"See full analysis below."}</div>
                     <div style={{marginTop:12}}>
                       <div className={`grade-pill grade-${result.grade}`} style={{fontSize:10}}>
-                        {result.investScore>=75?"STRONG BUY (KHARIDEIN)":result.investScore>=55?"HOLD (ROKEIN)":"REVIEW (JAANCH KAREIN)"}
+                        {result.investScore>=75?"STRONG BUY":result.investScore>=55?"HOLD":"REVIEW"}
                       </div>
                     </div>
                   </div>
@@ -2616,7 +2616,7 @@ Summary: ${result.summary}`;
               </div>
 
               {/* ── Metric tiles ── */}
-              <div className="section-divider">Zaroori Metrics</div>
+              <div className="section-divider">Key Metrics</div>
               <div className="bento-metrics">
                 {[
                   {label:"Current Ratio", value:result.metrics.currentRatio,    sub:"Liquidity",       bar:result.scores.liquidity},
@@ -2644,7 +2644,7 @@ Summary: ${result.summary}`;
               </div>
 
               {/* ── Bento Row 2: Radar · Bar · SHAP ── */}
-              <div className="section-divider">Score Ka Analysis</div>
+              <div className="section-divider">Score Analysis</div>
               <div className="bento-row2">
                 <div className="bento-card" ref={radarRef}>
                   <div className="card-label"><div className="card-label-dot"/>Radar Breakdown</div>
@@ -2684,7 +2684,7 @@ Summary: ${result.summary}`;
                 <div className="bento-card">
                   <div className="card-label"><div className="card-label-dot" style={{background:"#8b5cf6"}}/>SHAP Attribution</div>
                   <div style={{fontSize:11,color:"#475569",marginBottom:12,lineHeight:1.5}}>
-                    Score = {result.totalScore}/100. Har bar 50 ke base ke hisab se contribution dikha raha hai.
+                    Score = {result.totalScore}/100. Each bar shows contribution relative to a base of 50.
                   </div>
                   {(result.shapValues||[]).map((sv,i)=>{
                     const isPos=sv.contribution>=0;
@@ -2715,11 +2715,11 @@ Summary: ${result.summary}`;
               </div>
 
               {/* ── AI Insights + Benchmark ── */}
-              <div className="section-divider">AI Insights Aur Benchmarking</div>
+              <div className="section-divider">AI Insights & Benchmarking</div>
               <div className="bento-row2">
                 <div className="bento-card span2">
                   <div className="groq-badge"><div className="groq-dot"/>GROQ LLAMA 3.3 70B · LIVE ANALYSIS</div>
-                  <div className="card-label"><div className="card-label-dot" style={{background:"#2dd4bf"}}/>Explainable Insights (Samajhne Yogya Insights)</div>
+                  <div className="card-label"><div className="card-label-dot" style={{background:"#2dd4bf"}}/>Explainable Insights</div>
                   {(result.insights||[]).map((ins,i)=>(
                     <div className="insight-row" key={i}>
                       <div className="insight-indicator" style={{background:typeCol(ins.type)}}/>
@@ -2741,10 +2741,10 @@ Summary: ${result.summary}`;
               {/* ── Forecast ── */}
               {result.forecastData?.length>0 && (
                 <>
-                  <div className="section-divider">12-Mahine Ka Forecast (Bhavishyavani)</div>
+                  <div className="section-divider">12-Month Forecast</div>
                   <div className="bento-card span3" style={{padding:24,marginBottom:14}}>
                     <div className="card-label"><div className="card-label-dot" style={{background:"#fb923c"}}/>Financial Health Trajectory</div>
-                    <div style={{fontSize:11,color:"#475569",marginBottom:16}}>Purane + Groq-projected scores aur confidence bands ke saath</div>
+                    <div style={{fontSize:11,color:"#475569",marginBottom:16}}>Historical + Groq-projected scores with confidence bands</div>
                     <ResponsiveContainer width="100%" height={220}>
                       <AreaChart data={result.forecastData} margin={{top:10,right:10,left:-20,bottom:0}}>
                         <defs>
@@ -2776,8 +2776,8 @@ Summary: ${result.summary}`;
                       </AreaChart>
                     </ResponsiveContainer>
                     <div className="forecast-note">
-                      <span style={{color:gColor}}>● Purana Data</span>
-                      <span>● <span>Groq Ki Bhavishyavani</span></span>
+                      <span style={{color:gColor}}>● Historical Data</span>
+                      <span>● <span>Groq Forecast</span></span>
                       <span style={{opacity:0.5}}>Shaded = confidence band</span>
                     </div>
                   </div>
@@ -2787,7 +2787,7 @@ Summary: ${result.summary}`;
               {/* ── Recommendations ── */}
               {result.recommendations?.length>0 && (
                 <>
-                  <div className="section-divider">Zaroori Kadam (Recommendations)</div>
+                  <div className="section-divider">Priority Actions (Recommendations)</div>
                   <div className="bento-card" style={{padding:24,marginBottom:14}}>
                     <div className="card-label"><div className="card-label-dot" style={{background:"#f87171"}}/>Priority Actions</div>
                     <RecommendationsSection recommendations={result.recommendations}/>
@@ -2810,7 +2810,7 @@ Summary: ${result.summary}`;
         {view==="result" && result && (
           <>
             <ChatWidget analysisContext={analysisCtx} visible={chatOpen} onClose={()=>setChatOpen(false)}/>
-            <button className="chat-fab" onClick={()=>setChatOpen(o=>!o)} title="Apne data par chat karein">
+            <button className="chat-fab" onClick={()=>setChatOpen(o=>!o)} title="Chat with your data">
               {chatOpen?"✕":"💬"}
             </button>
           </>
@@ -2823,7 +2823,7 @@ Summary: ${result.summary}`;
           <nav className="mobile-nav">
             <button className="mobile-nav-btn" onClick={()=>setView("form")}>
               <span className="mobile-nav-icon">←</span>
-              <span className="mobile-nav-label">PEECHE</span>
+              <span className="mobile-nav-label">BACK</span>
             </button>
             <button className="mobile-nav-btn" onClick={downloadPDF} disabled={downloading}>
               <span className="mobile-nav-icon">↓</span>
@@ -2841,7 +2841,7 @@ Summary: ${result.summary}`;
         )}
 
         {/* Copy toast */}
-        <div className={`copy-toast ${copyToast?"show":""}`}>✓ Summary clipboard par copy ho gayi</div>
+        <div className={`copy-toast ${copyToast?"show":""}`}>✓ Summary copied to clipboard</div>
 
       </div>{/* /app */}
     </>
