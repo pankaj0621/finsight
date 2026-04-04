@@ -1,7 +1,7 @@
 // =============================================================================
-//  FinSight v4.0 — NEXT-GEN FINTECH UI
+//  FinSight v4.0 — NEXT-GEN FINTECH UI (Hindi Latin Version)
 //  Cyber-Minimalist · Bento Grid · Glassmorphism · Dynamic Grade Glow
-//  All existing logic preserved — only styles & JSX structure overhauled
+//  Design ko fix kiya gaya hai taaki text black na dikhe (Mobile Navbar Fixed)
 // =============================================================================
 
 import { useState, useEffect, useRef } from "react";
@@ -12,10 +12,11 @@ import {
   ReferenceLine, Area, AreaChart, CartesianGrid, Line,
 } from "recharts";
 
+// API ka base URL set karein
 const API_BASE = import.meta.env.VITE_API_URL || "https://finsight-backend-f0pq.onrender.com";
 
 // =============================================================================
-// Fonts & Global CSS — God-Level Redesign
+// Fonts aur Global CSS — Design aur Colors
 // =============================================================================
 const FONTS = `
   @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,700&family=Inter:wght@300;400;500;600&family=Geist+Mono:wght@300;400;500;600&display=swap');
@@ -72,6 +73,12 @@ const styles = `
     overflow-x: hidden;
   }
 
+  /* Browser ke default button color ko fix karein taaki black text na aaye */
+  button {
+    font-family: inherit;
+    color: var(--text); 
+  }
+
   /* ── Scrollbar ── */
   ::-webkit-scrollbar { width: 4px; height: 4px; }
   ::-webkit-scrollbar-track { background: transparent; }
@@ -110,7 +117,7 @@ const styles = `
   }
 
   /* ════════════════════════════════════════════
-     GLASSMORPHISM UTILITY
+     GLASSMORPHISM UTILITY (Glass Effect)
   ════════════════════════════════════════════ */
   .glass {
     background: var(--glass);
@@ -146,7 +153,7 @@ const styles = `
   }
 
   /* ════════════════════════════════════════════
-     HEADER
+     HEADER (Upar ka hissa)
   ════════════════════════════════════════════ */
   .header {
     display: flex;
@@ -243,7 +250,7 @@ const styles = `
   }
 
   /* ════════════════════════════════════════════
-     HERO SECTION
+     HERO SECTION (Main Banner)
   ════════════════════════════════════════════ */
   .hero {
     padding: 72px 0 48px;
@@ -311,7 +318,7 @@ const styles = `
   }
 
   /* ════════════════════════════════════════════
-     FORM SECTION
+     FORM SECTION (Data dalne ka form)
   ════════════════════════════════════════════ */
   .form-wrap {
     padding-bottom: 80px;
@@ -436,7 +443,7 @@ const styles = `
   .field input, .field select {
     background: rgba(255,255,255,0.04);
     border: 1px solid var(--glass-border);
-    color: var(--text);
+    color: var(--text); /* Black text fix */
     padding: 11px 14px;
     border-radius: var(--radius-sm);
     font-family: var(--font-mono);
@@ -457,7 +464,7 @@ const styles = `
     opacity: 0.7;
   }
 
-  .field select option { background: #0f0f1a; }
+  .field select option { background: #0f0f1a; color: var(--text); }
 
   /* CTA button */
   .btn-cta {
@@ -506,7 +513,7 @@ const styles = `
   }
 
   /* ════════════════════════════════════════════
-     UPLOAD ZONE
+     UPLOAD ZONE (File dalne ki jagah)
   ════════════════════════════════════════════ */
   .upload-zone {
     border: 2px dashed rgba(255,255,255,0.08);
@@ -640,7 +647,7 @@ const styles = `
   .add-year-btn:hover { border-color: var(--teal); color: var(--teal); }
 
   /* ════════════════════════════════════════════
-     LOADING
+     LOADING (Intezaar ki screen)
   ════════════════════════════════════════════ */
   .loading-wrap {
     display: flex;
@@ -1514,7 +1521,7 @@ const styles = `
   }
 
   /* ════════════════════════════════════════════
-     RECOMMENDATIONS
+     RECOMMENDATIONS (Zaroori Kadam)
   ════════════════════════════════════════════ */
   .rec-item {
     background: rgba(255,255,255,0.02);
@@ -1770,7 +1777,7 @@ const styles = `
   .chat-send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
   /* ════════════════════════════════════════════
-     MOBILE BOTTOM NAV
+     MOBILE BOTTOM NAV (Yahan text gayab ho jata tha)
   ════════════════════════════════════════════ */
   .mobile-nav {
     display: none;
@@ -1791,6 +1798,7 @@ const styles = `
     .chat-panel { bottom: 140px; }
   }
 
+  /* Is jagah var(--text2) miss hone ki wajah se default black text aa raha tha */
   .mobile-nav-btn {
     display: flex;
     flex-direction: column;
@@ -1802,16 +1810,17 @@ const styles = `
     padding: 6px 12px;
     border-radius: var(--radius-xs);
     transition: background 0.2s;
+    color: var(--text2); /* 👈 Yeh fix hai */
   }
 
-  .mobile-nav-btn:hover { background: rgba(255,255,255,0.05); }
+  .mobile-nav-btn:hover { background: rgba(255,255,255,0.05); color: var(--text); }
 
-  .mobile-nav-icon { font-size: 18px; }
+  .mobile-nav-icon { font-size: 18px; color: inherit; }
 
   .mobile-nav-label {
     font-family: var(--font-mono);
     font-size: 9px;
-    color: var(--text3);
+    color: inherit;
     letter-spacing: 0.06em;
   }
 
@@ -1897,10 +1906,10 @@ const DEMOS = {
   "Growth Stage":  {companyName:"NovaSpark Solutions",industry:"Technology",revenue:"8500000",prevRevenue:"5000000",netProfit:"420000",totalAssets:"12000000",totalLiabilities:"5500000",currentAssets:"4800000",currentLiabilities:"2200000",inventory:"600000",operatingExpenses:"7200000"},
 };
 const EMPTY_FORM = {companyName:"",industry:"General",revenue:"",prevRevenue:"",netProfit:"",totalAssets:"",totalLiabilities:"",currentAssets:"",currentLiabilities:"",inventory:"",operatingExpenses:""};
-const LOADING_STEPS = ["PARSING FINANCIAL DATA...","COMPUTING ALTMAN Z-SCORE...","RUNNING SCORING ENGINE...","COMPUTING SHAP ATTRIBUTIONS...","CALLING GROQ AI...","BUILDING FORECAST TRAJECTORY..."];
+const LOADING_STEPS = ["FINANCIAL DATA PARSE HO RAHA HAI...","ALTMAN Z-SCORE COMPUTE HO RAHA HAI...","SCORING ENGINE CHAL RAHA HAI...","SHAP ATTRIBUTIONS NIKALE JAA RAHE HAIN...","GROQ AI KO CALL KIYA JAA RAHA HAI...","FORECAST TRAJECTORY BANAYI JAA RAHI HAI..."];
 const INDUSTRIES = ["Technology","Manufacturing","Retail","Healthcare","Finance","Real Estate","Education","General"];
 const BENCH_LABELS = {currentRatio:"Current Ratio",quickRatio:"Quick Ratio",debtRatio:"Debt Ratio",netProfitMargin:"Net Margin",revenueGrowth:"Revenue Growth",assetTurnover:"Asset Turnover"};
-const QUICK_QUESTIONS = ["Why is my score this?","How to reduce debt?","Is my growth healthy?","What's my biggest risk?"];
+const QUICK_QUESTIONS = ["Mera score aisa kyun hai?","Debt (karz) kaise kam karein?","Kya meri growth healthy hai?","Mera sabse bada risk kya hai?"];
 
 // =============================================================================
 // Grade color helper
@@ -1925,7 +1934,7 @@ function BenchmarkSection({ benchmarks, industry }) {
             <div className="benchmark-name">{BENCH_LABELS[key]||key}</div>
             <div className="benchmark-bars-wrap">
               <div className="bm-row">
-                <div className="bm-who" style={{color:"#a3e635"}}>You</div>
+                <div className="bm-who" style={{color:"#a3e635"}}>Aap</div>
                 <div className="bm-track"><div className="bm-fill" style={{width:getPct(data.yours,max)+"%",background:"#a3e635"}}/></div>
                 <div className="bm-val">{data.yours}</div>
               </div>
@@ -1936,7 +1945,7 @@ function BenchmarkSection({ benchmarks, industry }) {
               </div>
             </div>
             <div className={`bm-status ${st==="better"?"bm-better":st==="onpar"?"bm-onpar":"bm-worse"}`}>
-              {st==="better"?"▲ BETTER":st==="onpar"?"≈ PAR":"▼ BELOW"}
+              {st==="better"?"▲ BEHTAR":st==="onpar"?"≈ BARABAR":"▼ NEECHE"}
             </div>
           </div>
         );
@@ -2013,8 +2022,8 @@ function SimulationSection({ originalResult, originalForm }) {
 
   return (
     <div className="sim-panel">
-      <div className="sim-title"><div className="sim-title-icon"/>SCENARIO SIMULATOR</div>
-      <div className="sim-subtitle">Adjust levers to model how business changes affect your financial health score.</div>
+      <div className="sim-title"><div className="sim-title-icon"/>SCENARIO SIMULATOR (BADLAAV DEKHEIN)</div>
+      <div className="sim-subtitle">Sliders adjust karein aur dekhein ki business me badlaav se aapke financial score par kya asar padta hai.</div>
       <div className="sim-sliders">
         {[
           {key:"revenueChange",  label:"Revenue Delta"},
@@ -2041,7 +2050,7 @@ function SimulationSection({ originalResult, originalForm }) {
         ))}
       </div>
       <button className="btn-simulate" onClick={runSim} disabled={simLoading}>
-        {simLoading?"COMPUTING...":"▶ RUN SIMULATION"}
+        {simLoading?"CALCULATE HO RAHA HAI...":"▶ SIMULATION RUN KAREIN"}
       </button>
       {simResult && (
         <div className="sim-result-grid">
@@ -2069,7 +2078,7 @@ function SimulationSection({ originalResult, originalForm }) {
 // Floating Chat Widget
 // =============================================================================
 function ChatWidget({ analysisContext, visible, onClose }) {
-  const [messages,    setMessages]    = useState([{role:"ai",text:"Hi! I'm FinSight AI. Ask me anything about your company's financial health."}]);
+  const [messages,    setMessages]    = useState([{role:"ai",text:"Namaste! Main FinSight AI hoon. Apni company ki financial health ke baare mein kuch bhi poochhein."}]);
   const [input,       setInput]       = useState("");
   const [chatLoading, setChatLoading] = useState(false);
   const endRef = useRef(null);
@@ -2089,9 +2098,9 @@ function ChatWidget({ analysisContext, visible, onClose }) {
         body:JSON.stringify({message:msg, analysisContext}),
       });
       const data = await res.json();
-      setMessages(m=>[...m,{role:"ai",text:data.answer||"Sorry, couldn't process that."}]);
+      setMessages(m=>[...m,{role:"ai",text:data.answer||"Maaf karein, process nahi ho paaya."}]);
     } catch(e) {
-      setMessages(m=>[...m,{role:"ai",text:"Connection error. Try again."}]);
+      setMessages(m=>[...m,{role:"ai",text:"Connection error aa gaya hai. Phir se koshish karein."}]);
     } finally {
       setChatLoading(false);
     }
@@ -2113,7 +2122,7 @@ function ChatWidget({ analysisContext, visible, onClose }) {
         {messages.map((m,i)=>(
           <div className={`chat-msg ${m.role}`} key={i}>{m.text}</div>
         ))}
-        {chatLoading && <div className="chat-msg ai loading">Thinking...</div>}
+        {chatLoading && <div className="chat-msg ai loading">Soch raha hoon...</div>}
         <div ref={endRef}/>
       </div>
       <div className="chat-quick-btns">
@@ -2124,14 +2133,14 @@ function ChatWidget({ analysisContext, visible, onClose }) {
       <div className="chat-input-wrap">
         <input
           className="chat-input-field"
-          placeholder="Ask about your finances..."
+          placeholder="Apne finances ke baare me poochhein..."
           value={input}
           onChange={e=>setInput(e.target.value)}
           onKeyDown={e=>e.key==="Enter"&&!chatLoading&&send()}
           disabled={chatLoading}
         />
         <button className="chat-send-btn" onClick={()=>send()} disabled={chatLoading||!input.trim()}>
-          {chatLoading?"...":"SEND"}
+          {chatLoading?"...":"BHEJEIN"}
         </button>
       </div>
     </div>
@@ -2139,7 +2148,7 @@ function ChatWidget({ analysisContext, visible, onClose }) {
 }
 
 // =============================================================================
-// Main Component
+// Main Component (Mukhya Hissa)
 // =============================================================================
 export default function FinSight() {
   const [view,        setView]        = useState("form");
@@ -2192,7 +2201,7 @@ export default function FinSight() {
     }catch(e){
       clearInterval(tick);
       setUploadState({status:"error",progress:0,extracted:null});
-      setError(`Extraction failed: ${e.message}`);
+      setError(`Extraction fail ho gayi: ${e.message}`);
     }
   };
 
@@ -2233,7 +2242,7 @@ export default function FinSight() {
       setTimeout(()=>setView("result"),300);
     }catch(e){
       clearInterval(si);
-      setError(`Analysis failed: ${e.message}`);
+      setError(`Analysis fail ho gaya: ${e.message}`);
       setView("form");
     }
   };
@@ -2257,7 +2266,7 @@ export default function FinSight() {
       a.href=url;a.download=`FinSight_Report_${af.companyName||"SME"}.pdf`;
       document.body.appendChild(a);a.click();a.remove();
     }catch(e){
-      alert(`PDF failed: ${e.message}`);
+      alert(`PDF fail ho gaya: ${e.message}`);
     }finally{setDownloading(false);}
   };
 
@@ -2316,7 +2325,7 @@ Summary: ${result.summary}`;
     metrics:result.metrics,altman:result.altman,summary:result.summary,
   }:{};
 
-  // ── Tooltip for recharts ──
+  // ── Tooltip for recharts (Text Color Issue Fixed) ──
   const ChartTooltip = ({contentStyle:_,...p}) => (
     <div style={{background:"rgba(8,8,16,0.95)",border:"1px solid rgba(255,255,255,0.08)",borderRadius:8,padding:"8px 12px",fontFamily:"Geist Mono",fontSize:11,color:"#f1f5f9",...p}}/>
   );
@@ -2343,7 +2352,7 @@ Summary: ${result.summary}`;
             <div className="header-right">
               <div className={`status-pill ${apiStatus==="ok"?"ok":"err"}`}>
                 <div className="status-dot"/>
-                {apiStatus==="ok"?"BACKEND LIVE":apiStatus==="err"?"OFFLINE":"CONNECTING"}
+                {apiStatus==="ok"?"BACKEND LIVE (CHALU HAI)":apiStatus==="err"?"OFFLINE":"CONNECTING"}
               </div>
             </div>
           </header>
@@ -2358,9 +2367,9 @@ Summary: ${result.summary}`;
             <div className="hero">
               <div className="hero-eyebrow">
                 <span style={{width:6,height:6,borderRadius:"50%",background:"#a3e635",flexShrink:0,display:"inline-block"}}/>
-                POWERED BY GROQ LLAMA 3.3 70B
+                GROQ LLAMA 3.3 70B DWARA SANCHALIT
               </div>
-              <h2>AI Financial Health<br/><em>Intelligence</em> for SMEs</h2>
+              <h2>SMEs Ke Liye AI Financial<br/>Health <em>Intelligence</em></h2>
               <p className="hero-sub">Real-time scoring · Altman Z-Score · SHAP explainability · Scenario simulation · AI chat</p>
               <div className="hero-tags">
                 {["Groq LLaMA","Altman Z-Score","SHAP XAI","Industry Benchmarking","Scenario Sim","PDF Export"].map(t=>(
@@ -2380,7 +2389,7 @@ Summary: ${result.summary}`;
               <div className="mode-tabs">
                 {["manual","upload","multiyear"].map(m=>(
                   <button key={m} className={`mode-tab ${inputMode===m?"active":""}`} onClick={()=>setInputMode(m)}>
-                    {m==="manual"?"Manual Entry":m==="upload"?"Upload Doc":"Multi-Year"}
+                    {m==="manual"?"Manual Entry":m==="upload"?"Doc Upload Karein":"Multi-Year Data"}
                   </button>
                 ))}
               </div>
@@ -2403,20 +2412,20 @@ Summary: ${result.summary}`;
                   >
                     <input type="file" accept=".pdf,.xlsx,.xls,.csv" onChange={e=>handleFileUpload(e.target.files[0])}/>
                     <div className="upload-icon">📊</div>
-                    <h3>Drop Financial Statement</h3>
-                    <p>PDF · Excel · CSV — AI extracts all fields automatically</p>
+                    <h3>Yahan Financial Statement Drop Karein</h3>
+                    <p>PDF · Excel · CSV — AI sabhi fields automatically extract kar lega</p>
                     {uploadState.status!=="idle" && (
                       <>
                         <div className="upload-bar-track"><div className="upload-bar-fill" style={{width:uploadState.progress+"%"}}/></div>
                         <div className="upload-status">
-                          {uploadState.status==="processing"?"Extracting with AI...":uploadState.status==="done"?`✓ Extracted ${uploadState.extracted?.fieldsExtracted||0} fields (${uploadState.extracted?.confidence||0}% confidence)`:uploadState.status==="error"?"✗ Extraction failed":""}
+                          {uploadState.status==="processing"?"AI se extract ho raha hai...":uploadState.status==="done"?`✓ ${uploadState.extracted?.fieldsExtracted||0} fields extract ho gaye (${uploadState.extracted?.confidence||0}% confidence)`:uploadState.status==="error"?"✗ Extraction fail ho gaya":""}
                         </div>
                       </>
                     )}
                   </div>
                   {uploadState.extracted && (
                     <div className="extracted-preview">
-                      <div className="extracted-preview-title">Extracted Financial Data — Review Before Analyzing</div>
+                      <div className="extracted-preview-title">Extracted Financial Data — Analyze karne se pehle check karein</div>
                       <div className="extracted-grid">
                         {Object.entries(uploadState.extracted).filter(([k])=>!["confidence","fieldsExtracted"].includes(k)).map(([k,v])=>(
                           <div className="extracted-item" key={k}>
@@ -2434,9 +2443,9 @@ Summary: ${result.summary}`;
               {inputMode==="manual" && (
                 <>
                   <div className="form-block">
-                    <div className="form-block-label">Company Info</div>
+                    <div className="form-block-label">Company Ki Jaankari</div>
                     <div className="form-grid">
-                      <div className="field"><label>COMPANY NAME</label><input placeholder="e.g. Acme Pvt Ltd" value={form.companyName} onChange={e=>set("companyName",e.target.value)}/></div>
+                      <div className="field"><label>COMPANY NAME</label><input placeholder="Jaise ki Acme Pvt Ltd" value={form.companyName} onChange={e=>set("companyName",e.target.value)}/></div>
                       <div className="field"><label>INDUSTRY</label><select value={form.industry} onChange={e=>set("industry",e.target.value)}>{INDUSTRIES.map(i=><option key={i}>{i}</option>)}</select></div>
                     </div>
                   </div>
@@ -2473,16 +2482,16 @@ Summary: ${result.summary}`;
                     </div>
                   </div>
                   <div className="form-block">
-                    <div className="form-block-label">Yearly Data</div>
+                    <div className="form-block-label">Yearly Data (Saal Dar Saal)</div>
                     <div className="year-tabs">
                       {yearlyData.map((y,i)=>(
                         <button key={i} className={`year-tab ${activeYear===i?"active":""}`} onClick={()=>setActiveYear(i)}>FY {y.year}</button>
                       ))}
-                      <button className="add-year-btn" onClick={addYear}>+ Add Year</button>
+                      <button className="add-year-btn" onClick={addYear}>+ Naya Saal Jodein</button>
                     </div>
                     {yearlyData.map((y,i)=>i!==activeYear?null:(
                       <div key={i} className="form-grid">
-                        <div className="field"><label>YEAR</label><input placeholder="2024" value={y.year} onChange={e=>setYearField(i,"year",e.target.value)}/></div>
+                        <div className="field"><label>YEAR (SAAL)</label><input placeholder="2024" value={y.year} onChange={e=>setYearField(i,"year",e.target.value)}/></div>
                         <div className="field"><label>REVENUE</label><input type="number" value={y.revenue} onChange={e=>setYearField(i,"revenue",e.target.value)}/></div>
                         <div className="field"><label>NET PROFIT</label><input type="number" value={y.netProfit} onChange={e=>setYearField(i,"netProfit",e.target.value)}/></div>
                         <div className="field"><label>TOTAL ASSETS</label><input type="number" value={y.totalAssets} onChange={e=>setYearField(i,"totalAssets",e.target.value)}/></div>
@@ -2498,7 +2507,7 @@ Summary: ${result.summary}`;
               )}
 
               <button className="btn-cta" onClick={analyze} disabled={!canAnalyze}>
-                Analyze Financial Health →
+                Financial Health Analyze Karein →
               </button>
             </div>
           )}
@@ -2509,7 +2518,7 @@ Summary: ${result.summary}`;
           {view==="loading" && (
             <div className="loading-wrap">
               <div className="loader-ring"/>
-              <div className="loading-title">Analyzing Financial Data</div>
+              <div className="loading-title">Financial Data Analyze Ho Raha Hai</div>
               <div className="loading-steps">
                 {LOADING_STEPS.map((s,i)=>(
                   <div key={i} className={`loading-step ${i<loadingStep?"done":i===loadingStep?"active":""}`}>{s}</div>
@@ -2526,11 +2535,11 @@ Summary: ${result.summary}`;
 
               {/* Top action bar */}
               <div className="results-topbar">
-                <button className="btn-back" onClick={()=>setView("form")}>← Back</button>
+                <button className="btn-back" onClick={()=>setView("form")}>← Peeche Jayein</button>
                 <button className="btn-pdf" onClick={downloadPDF} disabled={downloading}>
-                  {downloading?"Generating...":"↓ PDF Report"}
+                  {downloading?"Ban Rahi Hai...":"↓ PDF Report Download Karein"}
                 </button>
-                <button className="btn-copy" onClick={copySummary}>⧉ Copy Summary</button>
+                <button className="btn-copy" onClick={copySummary}>⧉ Summary Copy Karein</button>
               </div>
 
               {/* ── Bento Row 1: Score · Altman · Investment ── */}
@@ -2567,7 +2576,7 @@ Summary: ${result.summary}`;
                     color:result.altman?.zoneColor
                   }}>{result.altman?.zone}</span>
                   <div className="altman-spectrum" style={{marginTop:"auto"}}>
-                    <div style={{fontFamily:"Geist Mono",fontSize:10,color:"#475569",letterSpacing:"0.08em",marginBottom:6}}>BANKRUPTCY PROBABILITY SPECTRUM</div>
+                    <div style={{fontFamily:"Geist Mono",fontSize:10,color:"#475569",letterSpacing:"0.08em",marginBottom:6}}>BANKRUPTCY PROBABILITY SPECTRUM (Diwaliya Hone Ki Sambhavna)</div>
                     <div className="altman-bar">
                       <div className="altman-bar-fill" style={{width:(result.altman?.percent||0)+"%"}}/>
                     </div>
@@ -2596,10 +2605,10 @@ Summary: ${result.summary}`;
                         background:result.investScore>=70?"linear-gradient(90deg,#a3e635,#65a30d)":result.investScore>=50?"linear-gradient(90deg,#2dd4bf,#0d9488)":"linear-gradient(90deg,#fb923c,#ea580c)"
                       }}/>
                     </div>
-                    <div className="invest-verdict">{result.investmentVerdict||"See full analysis below."}</div>
+                    <div className="invest-verdict">{result.investmentVerdict||"Pura analysis niche dekhein."}</div>
                     <div style={{marginTop:12}}>
                       <div className={`grade-pill grade-${result.grade}`} style={{fontSize:10}}>
-                        {result.investScore>=75?"STRONG BUY":result.investScore>=55?"HOLD":"REVIEW"}
+                        {result.investScore>=75?"STRONG BUY (KHARIDEIN)":result.investScore>=55?"HOLD (ROKEIN)":"REVIEW (JAANCH KAREIN)"}
                       </div>
                     </div>
                   </div>
@@ -2607,7 +2616,7 @@ Summary: ${result.summary}`;
               </div>
 
               {/* ── Metric tiles ── */}
-              <div className="section-divider">Key Metrics</div>
+              <div className="section-divider">Zaroori Metrics</div>
               <div className="bento-metrics">
                 {[
                   {label:"Current Ratio", value:result.metrics.currentRatio,    sub:"Liquidity",       bar:result.scores.liquidity},
@@ -2635,7 +2644,7 @@ Summary: ${result.summary}`;
               </div>
 
               {/* ── Bento Row 2: Radar · Bar · SHAP ── */}
-              <div className="section-divider">Score Analysis</div>
+              <div className="section-divider">Score Ka Analysis</div>
               <div className="bento-row2">
                 <div className="bento-card" ref={radarRef}>
                   <div className="card-label"><div className="card-label-dot"/>Radar Breakdown</div>
@@ -2644,6 +2653,11 @@ Summary: ${result.summary}`;
                       <PolarGrid stroke="rgba(255,255,255,0.06)"/>
                       <PolarAngleAxis dataKey="subject" tick={{fill:"#475569",fontSize:10,fontFamily:"Geist Mono"}}/>
                       <Radar dataKey="value" stroke={gColor} fill={gColor} fillOpacity={0.1} strokeWidth={1.5}/>
+                      <Tooltip 
+                        contentStyle={{background:"rgba(8,8,16,0.95)",border:"1px solid rgba(255,255,255,0.08)",borderRadius:8,fontFamily:"Geist Mono",fontSize:11}}
+                        itemStyle={{color: '#f1f5f9'}}
+                        labelStyle={{color: '#94a3b8'}}
+                      />
                     </RadarChart>
                   </ResponsiveContainer>
                 </div>
@@ -2654,7 +2668,12 @@ Summary: ${result.summary}`;
                     <BarChart data={barData} barSize={22}>
                       <XAxis dataKey="name" tick={{fill:"#475569",fontSize:10,fontFamily:"Geist Mono"}} axisLine={false} tickLine={false}/>
                       <YAxis domain={[0,100]} tick={{fill:"#475569",fontSize:10,fontFamily:"Geist Mono"}} axisLine={false} tickLine={false}/>
-                      <Tooltip contentStyle={{background:"rgba(8,8,16,0.95)",border:"1px solid rgba(255,255,255,0.08)",borderRadius:8,fontFamily:"Geist Mono",fontSize:11}} cursor={{fill:"rgba(255,255,255,0.02)"}}/>
+                      <Tooltip 
+                        contentStyle={{background:"rgba(8,8,16,0.95)",border:"1px solid rgba(255,255,255,0.08)",borderRadius:8,fontFamily:"Geist Mono",fontSize:11}} 
+                        itemStyle={{color: '#f1f5f9'}}
+                        labelStyle={{color: '#94a3b8'}}
+                        cursor={{fill:"rgba(255,255,255,0.02)"}}
+                      />
                       <Bar dataKey="score" radius={[3,3,0,0]}>
                         {barData.map((e,i)=><Cell key={i} fill={barCol(e.score)}/>)}
                       </Bar>
@@ -2665,7 +2684,7 @@ Summary: ${result.summary}`;
                 <div className="bento-card">
                   <div className="card-label"><div className="card-label-dot" style={{background:"#8b5cf6"}}/>SHAP Attribution</div>
                   <div style={{fontSize:11,color:"#475569",marginBottom:12,lineHeight:1.5}}>
-                    Score = {result.totalScore}/100. Each bar = contribution relative to baseline of 50.
+                    Score = {result.totalScore}/100. Har bar 50 ke base ke hisab se contribution dikha raha hai.
                   </div>
                   {(result.shapValues||[]).map((sv,i)=>{
                     const isPos=sv.contribution>=0;
@@ -2696,11 +2715,11 @@ Summary: ${result.summary}`;
               </div>
 
               {/* ── AI Insights + Benchmark ── */}
-              <div className="section-divider">AI Insights & Benchmarking</div>
+              <div className="section-divider">AI Insights Aur Benchmarking</div>
               <div className="bento-row2">
                 <div className="bento-card span2">
                   <div className="groq-badge"><div className="groq-dot"/>GROQ LLAMA 3.3 70B · LIVE ANALYSIS</div>
-                  <div className="card-label"><div className="card-label-dot" style={{background:"#2dd4bf"}}/>Explainable Insights</div>
+                  <div className="card-label"><div className="card-label-dot" style={{background:"#2dd4bf"}}/>Explainable Insights (Samajhne Yogya Insights)</div>
                   {(result.insights||[]).map((ins,i)=>(
                     <div className="insight-row" key={i}>
                       <div className="insight-indicator" style={{background:typeCol(ins.type)}}/>
@@ -2722,10 +2741,10 @@ Summary: ${result.summary}`;
               {/* ── Forecast ── */}
               {result.forecastData?.length>0 && (
                 <>
-                  <div className="section-divider">12-Month Forecast</div>
+                  <div className="section-divider">12-Mahine Ka Forecast (Bhavishyavani)</div>
                   <div className="bento-card span3" style={{padding:24,marginBottom:14}}>
                     <div className="card-label"><div className="card-label-dot" style={{background:"#fb923c"}}/>Financial Health Trajectory</div>
-                    <div style={{fontSize:11,color:"#475569",marginBottom:16}}>Historical + Groq-projected scores with widening confidence bands</div>
+                    <div style={{fontSize:11,color:"#475569",marginBottom:16}}>Purane + Groq-projected scores aur confidence bands ke saath</div>
                     <ResponsiveContainer width="100%" height={220}>
                       <AreaChart data={result.forecastData} margin={{top:10,right:10,left:-20,bottom:0}}>
                         <defs>
@@ -2737,7 +2756,11 @@ Summary: ${result.summary}`;
                         <CartesianGrid stroke="rgba(255,255,255,0.04)" strokeDasharray="3 3" vertical={false}/>
                         <XAxis dataKey="period" tick={{fill:"#475569",fontSize:10,fontFamily:"Geist Mono"}} axisLine={false} tickLine={false}/>
                         <YAxis domain={[0,100]} tick={{fill:"#475569",fontSize:10,fontFamily:"Geist Mono"}} axisLine={false} tickLine={false}/>
-                        <Tooltip contentStyle={{background:"rgba(8,8,16,0.95)",border:"1px solid rgba(255,255,255,0.08)",borderRadius:8,fontFamily:"Geist Mono",fontSize:11}}/>
+                        <Tooltip 
+                          contentStyle={{background:"rgba(8,8,16,0.95)",border:"1px solid rgba(255,255,255,0.08)",borderRadius:8,fontFamily:"Geist Mono",fontSize:11}}
+                          itemStyle={{color: '#f1f5f9'}}
+                          labelStyle={{color: '#94a3b8'}}
+                        />
                         <ReferenceLine y={65} stroke="#2dd4bf" strokeDasharray="4 4" strokeOpacity={0.3}/>
                         <ReferenceLine y={45} stroke="#f87171" strokeDasharray="4 4" strokeOpacity={0.25}/>
                         <Area type="monotone" dataKey="confidence_hi" stroke="none" fill="url(#cg)"/>
@@ -2753,8 +2776,8 @@ Summary: ${result.summary}`;
                       </AreaChart>
                     </ResponsiveContainer>
                     <div className="forecast-note">
-                      <span style={{color:gColor}}>● Historical</span>
-                      <span>● <span>Groq Forecasted</span></span>
+                      <span style={{color:gColor}}>● Purana Data</span>
+                      <span>● <span>Groq Ki Bhavishyavani</span></span>
                       <span style={{opacity:0.5}}>Shaded = confidence band</span>
                     </div>
                   </div>
@@ -2764,7 +2787,7 @@ Summary: ${result.summary}`;
               {/* ── Recommendations ── */}
               {result.recommendations?.length>0 && (
                 <>
-                  <div className="section-divider">Actionable Recommendations</div>
+                  <div className="section-divider">Zaroori Kadam (Recommendations)</div>
                   <div className="bento-card" style={{padding:24,marginBottom:14}}>
                     <div className="card-label"><div className="card-label-dot" style={{background:"#f87171"}}/>Priority Actions</div>
                     <RecommendationsSection recommendations={result.recommendations}/>
@@ -2787,7 +2810,7 @@ Summary: ${result.summary}`;
         {view==="result" && result && (
           <>
             <ChatWidget analysisContext={analysisCtx} visible={chatOpen} onClose={()=>setChatOpen(false)}/>
-            <button className="chat-fab" onClick={()=>setChatOpen(o=>!o)} title="Chat with your data">
+            <button className="chat-fab" onClick={()=>setChatOpen(o=>!o)} title="Apne data par chat karein">
               {chatOpen?"✕":"💬"}
             </button>
           </>
@@ -2800,7 +2823,7 @@ Summary: ${result.summary}`;
           <nav className="mobile-nav">
             <button className="mobile-nav-btn" onClick={()=>setView("form")}>
               <span className="mobile-nav-icon">←</span>
-              <span className="mobile-nav-label">BACK</span>
+              <span className="mobile-nav-label">PEECHE</span>
             </button>
             <button className="mobile-nav-btn" onClick={downloadPDF} disabled={downloading}>
               <span className="mobile-nav-icon">↓</span>
@@ -2818,7 +2841,7 @@ Summary: ${result.summary}`;
         )}
 
         {/* Copy toast */}
-        <div className={`copy-toast ${copyToast?"show":""}`}>✓ Summary copied to clipboard</div>
+        <div className={`copy-toast ${copyToast?"show":""}`}>✓ Summary clipboard par copy ho gayi</div>
 
       </div>{/* /app */}
     </>
