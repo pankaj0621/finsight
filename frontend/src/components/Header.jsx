@@ -93,17 +93,21 @@ const headerStyles = `
     animation: blink 2s infinite;
   }
 
-  /* Mobile Responsiveness */
+  /* Mobile Responsive Navbar Fix */
   @media (max-width: 600px) {
     .header {
       flex-direction: column;
       align-items: flex-start;
-      gap: 12px;
-      padding: 16px 24px;
+      gap: 14px;
+      padding: 16px 0; /* Horizontal padding hata diya */
+      margin: 0; /* Negative margin hata diya taaki bahar na jaye */
     }
     .header-right {
       width: 100%;
-      justify-content: flex-start;
+    }
+    .status-pill {
+      width: 100%;
+      justify-content: center; /* Text ko center mein laane ke liye */
     }
   }
 `;

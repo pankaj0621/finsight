@@ -19,7 +19,7 @@ const shellStyles = `
     min-height: 100vh;
     background: var(--bg);
     position: relative;
-    overflow-x: hidden;
+    overflow-x: clip;
   }
 
   .mesh-bg {
