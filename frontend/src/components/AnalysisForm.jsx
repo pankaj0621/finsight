@@ -2,9 +2,7 @@
 //  AnalysisForm Component — Manual, Upload, Multi-year modes
 // =============================================================================
 
-import { useState } from "react";
-import { DEMOS, EMPTY_FORM, INDUSTRIES, API_BASE } from "../utils/constants.js";
-import { LayoutDashboard, FileText, Activity } from 'lucide-react';
+import { DEMOS, INDUSTRIES, API_BASE } from "../utils/constants.js";
 // Component mein use karein: <LayoutDashboard size={20} />
 
 const formStyles = `

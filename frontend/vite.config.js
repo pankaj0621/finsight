@@ -13,21 +13,17 @@ export default defineConfig({
     },
   },
   build: {
-    // 1. Chunk size limit ko 1000kb tak badha dete hain
     chunkSizeWarningLimit: 1000,
-    
-    // 2. Badi libraries ko alag-alag chunks mein split karne ki settings
     rollupOptions: {
       output: {
         manualChunks(id) {
           if (id.includes('node_modules')) {
+            // Keep recharts in its own chunk because it is large
             if (id.includes('recharts')) {
               return 'recharts';
             }
-            if (id.includes('framer-motion')) {
-              return 'framer-motion';
-            }
-            return 'vendor'; // Baki saari libraries ek vendor chunk mein
+            // Everything else goes into 'vendor'
+            return 'vendor'; 
           }
         },
       },
