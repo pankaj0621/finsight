@@ -10,9 +10,3 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     </ErrorBoundary>
   </React.StrictMode>
 );
-
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <FinSight />
-  </React.StrictMode>
-);

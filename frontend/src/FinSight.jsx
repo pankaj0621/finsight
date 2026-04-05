@@ -88,20 +88,19 @@ export default function FinSight() {
     inputMode==="multiyear" ? {...form,...yearlyData[yearlyData.length-1]} : form;
 
   const analyze = async () => {
-    setError("");
-    const af = getActiveForm();
+  setError("");
+  setView("loading"); 
+  setLoadingStep(0);
+  const si = setInterval(() => setLoadingStep(p => Math.min(LOADING_STEPS.length-1,p+1)), 1200);
+  const af = getActiveForm();
 
-  // NEW VALIDATION BLOCK
   if (parseFloat(af.revenue) < 0 || parseFloat(af.totalAssets) <= 0) {
+    clearInterval(si);
     setError("Invalid Input: Revenue cannot be negative and Total Assets must be greater than zero.");
+    setView("form");
     return;
   }
-
-    setView("loading"); 
-    setLoadingStep(0);
-    const si = setInterval(() => setLoadingStep(p => Math.min(LOADING_STEPS.length-1,p+1)), 1200);
-    const af = getActiveForm();
-    try {
+  try {
       const res = await fetch(`${API_BASE}/api/analyze`, {
         method: "POST",
         headers: {"Content-Type":"application/json"},
