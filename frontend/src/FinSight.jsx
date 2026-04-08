@@ -1,6 +1,6 @@
 // =============================================================================
-//  FinSight v4 — Main Component (Orchestrator)
-//  Thin — delegates everything to child components
+//  FinSight v4 — Main Orchestrator
+//  Theme: Midnight Aurora
 // =============================================================================
 
 import { useState, useEffect, useRef } from "react";
@@ -22,16 +22,18 @@ const shellStyles = `
     overflow-x: clip;
   }
 
+  /* Midnight Aurora background gradient */
   .mesh-bg {
     position: fixed; inset: 0; pointer-events: none; z-index: 0;
     background:
-      radial-gradient(ellipse 80% 60% at 70% -10%, rgba(124,58,237,0.07) 0%, transparent 60%),
-      radial-gradient(ellipse 60% 50% at -10% 80%, rgba(6,182,212,0.05) 0%, transparent 60%),
-      radial-gradient(ellipse 40% 40% at 50% 50%, rgba(245,158,11,0.03) 0%, transparent 60%);
+      radial-gradient(ellipse 70% 55% at 75% -15%, rgba(167,139,250,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 55% 45% at -15% 85%, rgba(0,212,200,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 45% 45% at 50% 50%, rgba(255,107,107,0.02) 0%, transparent 60%);
   }
 
+  /* Subtle noise texture */
   .noise {
-    position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.2;
+    position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.18;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
   }
 
@@ -62,14 +64,12 @@ export default function FinSight() {
   const radarRef = useRef(null);
   const barRef   = useRef(null);
 
-  // Backend health check
   useEffect(() => {
     fetch(`${API_BASE}/health`)
       .then(r => r.ok ? setApiStatus("ok") : setApiStatus("err"))
       .catch(() => setApiStatus("err"));
   }, []);
 
-  // Animate score ring
   useEffect(() => {
     if (view==="result" && result) {
       let s = 0; const end = result.totalScore;
@@ -83,24 +83,25 @@ export default function FinSight() {
     inputMode==="multiyear" ? yearlyData.some(y=>y.revenue) :
                               !!form.revenue && !!form.totalAssets;
 
-  const getActiveForm = () => 
+  const getActiveForm = () =>
     inputMode==="upload"    && uploadState.extracted ? {...form,...uploadState.extracted} :
     inputMode==="multiyear" ? {...form,...yearlyData[yearlyData.length-1]} : form;
 
   const analyze = async () => {
-  setError("");
-  setView("loading"); 
-  setLoadingStep(0);
-  const si = setInterval(() => setLoadingStep(p => Math.min(LOADING_STEPS.length-1,p+1)), 1200);
-  const af = getActiveForm();
+    setError("");
+    setView("loading");
+    setLoadingStep(0);
+    const si = setInterval(() => setLoadingStep(p => Math.min(LOADING_STEPS.length-1,p+1)), 1200);
+    const af = getActiveForm();
 
-  if (parseFloat(af.revenue) < 0 || parseFloat(af.totalAssets) <= 0) {
-    clearInterval(si);
-    setError("Invalid Input: Revenue cannot be negative and Total Assets must be greater than zero.");
-    setView("form");
-    return;
-  }
-  try {
+    if (parseFloat(af.revenue) < 0 || parseFloat(af.totalAssets) <= 0) {
+      clearInterval(si);
+      setError("Invalid Input: Revenue cannot be negative and Total Assets must be greater than zero.");
+      setView("form");
+      return;
+    }
+
+    try {
       const res = await fetch(`${API_BASE}/api/analyze`, {
         method: "POST",
         headers: {"Content-Type":"application/json"},
@@ -148,8 +149,8 @@ export default function FinSight() {
     setDownloading(true);
     try {
       let rb=null, bb=null;
-      if (radarRef.current) rb = await toPng(radarRef.current, {backgroundColor:"#10121a"});
-      if (barRef.current)   bb = await toPng(barRef.current,   {backgroundColor:"#10121a"});
+      if (radarRef.current) rb = await toPng(radarRef.current, {backgroundColor:"#0a1120"});
+      if (barRef.current)   bb = await toPng(barRef.current,   {backgroundColor:"#0a1120"});
       const af = getActiveForm();
       const response = await fetch(`${API_BASE}/api/generate-report`, {
         method:"POST", headers:{"Content-Type":"application/json"},

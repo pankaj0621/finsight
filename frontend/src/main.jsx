@@ -1,12 +1,10 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
+import { StrictMode } from "react";
+import { createRoot }  from "react-dom/client";
+import "./styles/globals.css";
 import FinSight from "./FinSight.jsx";
-import ErrorBoundary from "./components/ErrorBoundary.jsx";
 
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <ErrorBoundary>
-      <FinSight />
-    </ErrorBoundary>
-  </React.StrictMode>
+createRoot(document.getElementById("root")).render(
+  <StrictMode>
+    <FinSight />
+  </StrictMode>
 );
