@@ -1,162 +1,151 @@
 // =============================================================================
-//  AnalysisForm Component — Manual, Upload, Multi-year modes
+//  AnalysisForm — Midnight Aurora Theme
+//  FIXES:
+//  1. hero-tag color: var(--text3) was #475569 = unreadable → now #a0bfd0
+//  2. hero h2 em gradient text — added fallback color for Safari
+//  3. placeholder color fixed (was var(--text4) = too dark)
+//  4. select option bg fixed for dark theme
 // =============================================================================
 
 import { DEMOS, INDUSTRIES, API_BASE } from "../utils/constants.js";
-// Component mein use karein: <LayoutDashboard size={20} />
 
 const formStyles = `
-  .hero {
-    padding: 60px 0 40px;
-    text-align: center;
-  }
+  /* ── Hero ── */
+  .hero { padding: 64px 0 44px; text-align: center; }
 
   .hero-eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(245,158,11,0.1);
-    border: 1px solid rgba(245,158,11,0.2);
-    border-radius: 20px;
-    padding: 5px 14px;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--amber);
-    letter-spacing: 0.06em;
-    margin-bottom: 24px;
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(0,212,200,0.08);
+    border: 1px solid rgba(0,212,200,0.2);
+    border-radius: 20px; padding: 5px 16px;
+    font-family: var(--font-mono); font-size: 11px;
+    color: #00d4c8;
+    letter-spacing: 0.06em; margin-bottom: 26px;
   }
 
+  /* FIX: explicit color for heading */
   .hero h2 {
     font-family: var(--font-display);
-    font-size: clamp(32px, 5vw, 58px);
-    font-weight: 800;
-    line-height: 1.08;
+    font-size: clamp(30px, 5vw, 56px);
+    font-weight: 900; line-height: 1.06;
     letter-spacing: -0.03em;
-    color: var(--text);
+    color: #e8f4f8;
     margin-bottom: 18px;
   }
 
+  /* FIX: gradient text with explicit fallback color for browsers that
+     don't support -webkit-background-clip: text */
   .hero h2 em {
     font-style: normal;
-    background: linear-gradient(135deg, #f59e0b 0%, #06b6d4 100%);
+    color: #00d4c8; /* fallback — always visible */
+    background: linear-gradient(135deg, #00d4c8 0%, #a78bfa 60%, #ff6b6b 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    /* Safety: if background-clip fails, color fallback shows */
+    -webkit-text-fill-color: transparent;
   }
 
+  /* FIX: hero-sub was defaulting to body color sometimes */
   .hero-sub {
-    font-size: 15px;
-    color: var(--text2);
-    max-width: 540px;
-    margin: 0 auto;
-    line-height: 1.75;
+    font-size: 15px; color: #a0bfd0;
+    max-width: 540px; margin: 0 auto; line-height: 1.75;
   }
 
   .hero-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    justify-content: center;
-    margin-top: 20px;
+    display: flex; flex-wrap: wrap;
+    gap: 8px; justify-content: center;
+    margin-top: 22px;
   }
 
+  /* FIX: was var(--text3) = #475569 — barely visible on dark bg
+     Now explicitly #a0bfd0 which is readable */
   .hero-tag {
     padding: 4px 12px;
-    background: var(--glass);
-    border: 1px solid var(--glass-border);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(0,212,200,0.12);
     border-radius: 20px;
-    font-family: var(--font-mono);
-    font-size: 10px;
-    color: var(--text3);
+    font-family: var(--font-mono); font-size: 10px;
+    color: #a0bfd0;
     letter-spacing: 0.05em;
+    transition: all 0.2s;
   }
 
-  /* Mode tabs */
+  .hero-tag:hover {
+    background: rgba(0,212,200,0.06);
+    border-color: rgba(0,212,200,0.25);
+    color: #00d4c8;
+  }
+
+  /* ── Mode tabs ── */
   .mode-tabs {
-    display: flex;
-    gap: 4px;
+    display: flex; gap: 4px;
     background: rgba(255,255,255,0.03);
-    border: 1px solid var(--glass-border);
-    border-radius: var(--r-sm);
-    padding: 4px;
-    margin-bottom: 24px;
-    width: fit-content;
+    border: 1px solid rgba(0,212,200,0.1);
+    border-radius: var(--r-sm); padding: 4px;
+    margin-bottom: 22px; width: fit-content;
   }
 
   .mode-tab {
-    padding: 8px 18px;
-    border-radius: 7px;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--text2);
-    background: none;
-    border: none;
-    cursor: pointer;
-    transition: all 0.2s;
-    letter-spacing: 0.05em;
+    padding: 8px 18px; border-radius: 7px;
+    font-family: var(--font-mono); font-size: 11px;
+    color: #a0bfd0;
+    background: none; border: none;
+    cursor: pointer; transition: all 0.2s; letter-spacing: 0.05em;
   }
 
+  .mode-tab:hover { color: #e8f4f8; }
+
+  /* FIX: active tab text color explicitly dark (it's on teal bg) */
   .mode-tab.active {
-    background: var(--amber);
-    color: #0c0e14;
+    background: #00d4c8;
+    color: #060b14;
     font-weight: 700;
-    box-shadow: 0 0 20px rgba(245,158,11,0.3);
+    box-shadow: 0 0 20px rgba(0,212,200,0.3);
   }
 
-  /* Demo strip */
+  /* ── Demo strip ── */
   .demo-strip {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 20px;
-    align-items: center;
-    flex-wrap: wrap;
+    display: flex; gap: 8px;
+    margin-bottom: 22px; align-items: center; flex-wrap: wrap;
   }
 
+  /* FIX: explicit readable color */
   .demo-label {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    color: var(--text3);
-    letter-spacing: 0.08em;
+    font-family: var(--font-mono); font-size: 10px;
+    color: #5e8a9f; letter-spacing: 0.08em;
   }
 
   .demo-chip {
     padding: 5px 14px;
-    background: var(--glass);
-    border: 1px solid var(--glass-border);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(0,212,200,0.12);
     border-radius: 20px;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--text2);
-    cursor: pointer;
-    transition: all 0.2s;
+    font-family: var(--font-mono); font-size: 11px;
+    color: #a0bfd0;
+    cursor: pointer; transition: all 0.2s;
   }
 
   .demo-chip:hover {
-    background: rgba(6,182,212,0.08);
-    border-color: rgba(6,182,212,0.3);
-    color: var(--cyan);
+    background: rgba(0,212,200,0.08);
+    border-color: rgba(0,212,200,0.3);
+    color: #00d4c8;
   }
 
-  /* Form block */
-  .form-block { margin-bottom: 20px; }
+  /* ── Form blocks ── */
+  .form-block { margin-bottom: 22px; }
 
   .form-block-label {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-family: var(--font-mono);
-    font-size: 10px;
-    color: var(--cyan);
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 10px;
+    font-family: var(--font-mono); font-size: 10px;
+    color: #00d4c8;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    margin-bottom: 14px;
   }
 
   .form-block-label::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(90deg, rgba(6,182,212,0.25) 0%, transparent 100%);
+    content: ''; flex: 1; height: 1px;
+    background: linear-gradient(90deg, rgba(0,212,200,0.25) 0%, transparent 100%);
   }
 
   .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -164,166 +153,178 @@ const formStyles = `
 
   .field { display: flex; flex-direction: column; gap: 6px; }
 
+  /* FIX: explicit color for labels */
   .field label {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    color: var(--text3);
-    letter-spacing: 0.07em;
-    text-transform: uppercase;
+    font-family: var(--font-mono); font-size: 10px;
+    color: #5e8a9f;
+    letter-spacing: 0.07em; text-transform: uppercase;
   }
 
+  /* FIX: explicit color for inputs — never inherit */
   .field input, .field select {
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.08);
-    color: var(--text);
-    padding: 11px 14px;
-    border-radius: var(--r-sm);
-    font-family: var(--font-mono);
-    font-size: 13px;
-    outline: none;
-    transition: all 0.2s;
+    background: rgba(14,22,40,0.8);
+    border: 1px solid rgba(0,212,200,0.1);
+    color: #e8f4f8;
+    padding: 11px 14px; border-radius: var(--r-sm);
+    font-family: var(--font-mono); font-size: 13px;
+    outline: none; transition: all 0.2s;
     -webkit-appearance: none;
   }
 
   .field input:focus, .field select:focus {
-    border-color: rgba(245,158,11,0.4);
-    background: rgba(245,158,11,0.03);
-    box-shadow: 0 0 0 3px rgba(245,158,11,0.06);
+    border-color: rgba(0,212,200,0.4);
+    background: rgba(0,212,200,0.04);
+    box-shadow: 0 0 0 3px rgba(0,212,200,0.07);
   }
 
-  .field input::placeholder { color: var(--text4); }
-  .field select option { background: #141720; color: #e2e8f0; }
+  /* FIX: placeholder color was var(--text4) = #334155, invisible
+     Now using #3d6275 which is subtly visible */
+  .field input::placeholder { color: #3d6275; opacity: 1; }
 
-  /* CTA button */
+  /* FIX: select option must have explicit dark bg + light text */
+  .field select option {
+    background: #0a1120;
+    color: #e8f4f8;
+  }
+
+  /* FIX: select arrow visibility on dark bg */
+  .field select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235e8a9f' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+  }
+
+  /* ── CTA Button ── */
   .btn-cta {
-    width: 100%;
-    padding: 15px;
-    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-    color: #0c0e14;
-    border: none;
-    border-radius: var(--r-sm);
+    width: 100%; padding: 15px;
+    background: linear-gradient(135deg, #00d4c8 0%, #0891b2 100%);
+    color: #060b14;
+    border: none; border-radius: var(--r-sm);
     font-family: var(--font-display);
-    font-size: 15px;
-    font-weight: 700;
-    cursor: pointer;
-    letter-spacing: 0.01em;
-    transition: all 0.25s;
-    margin-top: 8px;
-    box-shadow: 0 0 30px rgba(245,158,11,0.25);
+    font-size: 15px; font-weight: 800;
+    cursor: pointer; letter-spacing: 0.01em;
+    transition: all 0.25s; margin-top: 8px;
+    box-shadow: 0 0 32px rgba(0,212,200,0.28);
   }
 
-  .btn-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 40px rgba(245,158,11,0.35); }
+  .btn-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 40px rgba(0,212,200,0.38); }
   .btn-cta:active { transform: translateY(0); }
-  .btn-cta:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+  .btn-cta:disabled { opacity: 0.35; cursor: not-allowed; transform: none; box-shadow: none; }
 
-  /* Error */
+  /* ── Error ── */
   .error-pill {
-    background: rgba(244,63,94,0.08);
-    border: 1px solid rgba(244,63,94,0.2);
-    border-radius: var(--r-sm);
-    padding: 12px 16px;
-    font-family: var(--font-mono);
-    font-size: 12px;
-    color: var(--rose);
+    background: rgba(251,113,133,0.08);
+    border: 1px solid rgba(251,113,133,0.22);
+    border-radius: var(--r-sm); padding: 12px 16px;
+    font-family: var(--font-mono); font-size: 12px;
+    color: #fb7185;
     margin-bottom: 20px;
   }
 
-  /* Upload zone */
+  /* ── Upload Zone ── */
   .upload-zone {
-    border: 2px dashed rgba(255,255,255,0.08);
-    border-radius: var(--r);
-    padding: 60px 40px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.3s;
-    position: relative;
+    border: 2px dashed rgba(0,212,200,0.15);
+    border-radius: var(--r); padding: 60px 40px;
+    text-align: center; cursor: pointer;
+    transition: all 0.3s; position: relative;
     overflow: hidden;
-    background: rgba(255,255,255,0.015);
+    background: rgba(0,212,200,0.02);
     margin-bottom: 20px;
   }
 
   .upload-zone:hover, .upload-zone.drag-over {
-    border-color: rgba(245,158,11,0.35);
-    background: rgba(245,158,11,0.025);
+    border-color: rgba(0,212,200,0.4);
+    background: rgba(0,212,200,0.04);
   }
 
   .upload-zone input[type="file"] {
-    position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+    position: absolute; inset: 0; opacity: 0; cursor: pointer;
+    width: 100%; height: 100%;
   }
 
   .upload-icon { font-size: 44px; margin-bottom: 16px; }
 
+  /* FIX: explicit heading color */
   .upload-zone h3 {
     font-family: var(--font-display);
     font-size: 20px; font-weight: 700;
-    margin-bottom: 8px; color: var(--text);
+    margin-bottom: 8px; color: #e8f4f8;
   }
 
-  .upload-zone p { color: var(--text2); font-size: 14px; }
+  /* FIX: explicit p color */
+  .upload-zone p { color: #a0bfd0; font-size: 14px; }
 
   .upload-bar-track {
-    height: 2px; background: rgba(255,255,255,0.06);
+    height: 2px; background: rgba(0,212,200,0.1);
     border-radius: 1px; overflow: hidden; margin: 20px 0 8px;
   }
 
   .upload-bar-fill {
     height: 100%;
-    background: linear-gradient(90deg, var(--amber), var(--cyan));
+    background: linear-gradient(90deg, #00d4c8, #a78bfa);
     border-radius: 1px; transition: width 0.3s;
   }
 
+  /* FIX: explicit status text color */
   .upload-status {
-    font-family: var(--font-mono); font-size: 11px; color: var(--text2);
+    font-family: var(--font-mono); font-size: 11px;
+    color: #a0bfd0;
   }
 
   .extracted-preview {
-    background: rgba(255,255,255,0.02);
-    border: 1px solid var(--glass-border);
-    border-radius: var(--r-sm);
-    padding: 18px; margin-top: 14px; text-align: left;
+    background: rgba(14,22,40,0.6);
+    border: 1px solid rgba(0,212,200,0.12);
+    border-radius: var(--r-sm); padding: 18px;
+    margin-top: 14px; text-align: left;
   }
 
   .extracted-title {
     font-family: var(--font-mono); font-size: 10px;
-    color: var(--cyan); letter-spacing: 0.12em;
-    text-transform: uppercase; margin-bottom: 12px;
+    color: #00d4c8;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    margin-bottom: 12px;
   }
 
   .extracted-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
 
   .extracted-item {
     display: flex; justify-content: space-between; align-items: center;
-    padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 12px;
+    padding: 7px 0; border-bottom: 1px solid rgba(0,212,200,0.07);
+    font-size: 12px;
   }
 
   .extracted-item:last-child { border-bottom: none; }
-  .extracted-key { color: var(--text3); font-family: var(--font-mono); font-size: 10px; }
-  .extracted-val { color: var(--amber); font-family: var(--font-mono); font-size: 11px; }
+  .extracted-key { color: #5e8a9f; font-family: var(--font-mono); font-size: 10px; }
+  .extracted-val { color: #00d4c8; font-family: var(--font-mono); font-size: 11px; font-weight: 500; }
 
-  /* Year tabs */
+  /* ── Year tabs ── */
   .year-tabs { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
 
   .year-tab {
     padding: 6px 14px;
-    background: var(--glass); border: 1px solid var(--glass-border);
+    background: rgba(14,22,40,0.8);
+    border: 1px solid rgba(0,212,200,0.1);
     border-radius: 20px; font-family: var(--font-mono); font-size: 11px;
-    color: var(--text2); cursor: pointer; transition: all 0.2s;
+    color: #a0bfd0;
+    cursor: pointer; transition: all 0.2s;
   }
 
   .year-tab.active {
-    background: rgba(245,158,11,0.1);
-    border-color: rgba(245,158,11,0.35);
-    color: var(--amber);
+    background: rgba(0,212,200,0.1);
+    border-color: rgba(0,212,200,0.35);
+    color: #00d4c8;
   }
 
   .add-year-btn {
     padding: 6px 14px; background: none;
-    border: 1px dashed rgba(255,255,255,0.1); border-radius: 20px;
-    font-family: var(--font-mono); font-size: 11px;
-    color: var(--text3); cursor: pointer; transition: all 0.2s;
+    border: 1px dashed rgba(0,212,200,0.15);
+    border-radius: 20px; font-family: var(--font-mono); font-size: 11px;
+    color: #5e8a9f;
+    cursor: pointer; transition: all 0.2s;
   }
 
-  .add-year-btn:hover { border-color: var(--cyan); color: var(--cyan); }
+  .add-year-btn:hover { border-color: #00d4c8; color: #00d4c8; }
 
   .form-wrap { padding-bottom: 80px; }
 `;
@@ -371,7 +372,7 @@ export default function AnalysisForm({
       <div className="hero">
         <div className="hero-eyebrow">⬡ Powered by Groq LLaMA 3.3 70B</div>
         <h2>AI-Powered Financial<br/><em>Health Scoring</em> for SMEs</h2>
-        <p className="hero-sub">Upload your financial statements or enter data manually. Get instant AI insights, bankruptcy risk assessment, benchmarking & forecasting.</p>
+        <p className="hero-sub">Upload financial statements or enter data manually. Get instant AI insights, Altman Z-Score, SHAP explainability & 12-month forecasting.</p>
         <div className="hero-tags">
           {["Altman Z-Score","SHAP Explainability","Industry Benchmarks","Scenario Simulation","12-Month Forecast","AI Chat"].map(t=>(
             <span className="hero-tag" key={t}>{t}</span>
@@ -423,7 +424,7 @@ export default function AnalysisForm({
             </div>
             {uploadState.extracted && (
               <div className="extracted-preview">
-                <div className="extracted-title">Extracted Data</div>
+                <div className="extracted-title">Extracted Data — Review Before Analyzing</div>
                 <div className="extracted-grid">
                   {Object.entries(uploadState.extracted)
                     .filter(([k]) => !["confidence","fieldsExtracted"].includes(k))
@@ -445,19 +446,10 @@ export default function AnalysisForm({
             <div className="form-block">
               <div className="form-block-label">Company Info</div>
               <div className="form-grid">
-                <div className="field">
-                  <label>Company Name</label>
-                  <input placeholder="e.g. Acme Pvt Ltd" value={form.companyName} onChange={e=>set("companyName",e.target.value)}/>
-                </div>
-                <div className="field">
-                  <label>Industry</label>
-                  <select value={form.industry} onChange={e=>set("industry",e.target.value)}>
-                    {INDUSTRIES.map(i => <option key={i}>{i}</option>)}
-                  </select>
-                </div>
+                <div className="field"><label>Company Name</label><input placeholder="e.g. Acme Pvt Ltd" value={form.companyName} onChange={e=>set("companyName",e.target.value)}/></div>
+                <div className="field"><label>Industry</label><select value={form.industry} onChange={e=>set("industry",e.target.value)}>{INDUSTRIES.map(i=><option key={i}>{i}</option>)}</select></div>
               </div>
             </div>
-
             <div className="form-block">
               <div className="form-block-label">Income Statement (₹)</div>
               <div className="form-grid">
@@ -467,7 +459,6 @@ export default function AnalysisForm({
                 <div className="field"><label>Operating Expenses</label><input type="number" placeholder="3800000" value={form.operatingExpenses} onChange={e=>set("operatingExpenses",e.target.value)}/></div>
               </div>
             </div>
-
             <div className="form-block">
               <div className="form-block-label">Balance Sheet (₹)</div>
               <div className="form-grid">
