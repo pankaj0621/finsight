@@ -1,5 +1,6 @@
 // =============================================================================
 //  FinSight — Constants & Utilities
+//  Theme: Midnight Aurora
 // =============================================================================
 
 export const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
@@ -48,34 +49,40 @@ export const QUICK_QUESTIONS = [
   "What's my biggest risk?",
 ];
 
-// Color helpers
+// ── Color helpers — Midnight Aurora palette ──────────────────────────────────
 export const gradeCol = g =>
-  g==="A" ? "#f59e0b" :
-  g==="B" ? "#06b6d4" :
-  g==="C" ? "#f97316" : "#f43f5e";
+  g==="A" ? "#00d4c8" :   // Electric Teal — excellent
+  g==="B" ? "#a78bfa" :   // Violet — good
+  g==="C" ? "#fbbf24" :   // Amber — caution
+            "#fb7185";    // Rose — danger
 
 export const barCol = s =>
-  s>=75 ? "#f59e0b" :
-  s>=50 ? "#06b6d4" :
-  s>=30 ? "#f97316" : "#f43f5e";
+  s>=75 ? "#00d4c8" :     // Teal
+  s>=50 ? "#a78bfa" :     // Violet
+  s>=30 ? "#fbbf24" :     // Amber
+          "#fb7185";      // Rose
 
 export const typeCol = t =>
-  t==="good" ? "#10b981" :
-  t==="warn" ? "#f97316" : "#f43f5e";
+  t==="good" ? "#34d399" :   // Mint
+  t==="warn" ? "#fbbf24" :   // Amber
+               "#fb7185";    // Rose
 
-// Tooltip style for all Recharts charts — fixes black text bug
+// ── Recharts tooltip style — LIGHT TEXT on DARK bg ──────────────────────────
+// FIX: always specify color explicitly, never rely on inheritance
 export const TOOLTIP_STYLE = {
-  background:   "rgba(16,18,26,0.98)",
-  border:       "1px solid rgba(255,255,255,0.1)",
-  borderRadius: 8,
-  fontFamily:   "Fira Code, monospace",
+  background:   "rgba(6,11,20,0.97)",
+  border:       "1px solid rgba(0,212,200,0.22)",
+  borderRadius: 10,
+  fontFamily:   "'JetBrains Mono', monospace",
   fontSize:     11,
-  color:        "#e2e8f0",
+  color:        "#e8f4f8",   // ← explicit white — fixes black text bug
+  boxShadow:    "0 8px 32px rgba(0,0,0,0.7)",
 };
 
-// Chart axis tick style
+// ── Chart axis tick — explicitly light ────────────────────────────────────
+// FIX: fill must be light color, NOT relying on CSS var (SVG ignores CSS color)
 export const TICK_STYLE = {
-  fill:       "#475569",
+  fill:       "#5e8a9f",   // ← explicit hex, not var() — SVG ignores CSS vars
   fontSize:   10,
-  fontFamily: "Fira Code, monospace",
+  fontFamily: "'JetBrains Mono', monospace",
 };
