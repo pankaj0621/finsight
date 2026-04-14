@@ -1,6 +1,6 @@
 // =============================================================================
 //  FinSight v4 — Main Orchestrator
-//  Theme: Midnight Aurora
+//  Original Deep Slate + Amber Gold theme
 // =============================================================================
 
 import { useState, useEffect, useRef } from "react";
@@ -11,39 +11,25 @@ import AnalysisForm     from "./components/AnalysisForm.jsx";
 import LoadingScreen    from "./components/LoadingScreen.jsx";
 import ResultsDashboard from "./components/ResultsDashboard.jsx";
 import { API_BASE, EMPTY_FORM, LOADING_STEPS } from "./utils/constants.js";
-
 import "./styles/globals.css";
 
 const shellStyles = `
-  .app {
-    min-height: 100vh;
-    background: var(--bg);
-    position: relative;
-    overflow-x: clip;
-  }
+  .app { min-height: 100vh; background: var(--bg); position: relative; overflow-x: clip; }
 
-  /* Midnight Aurora background gradient */
   .mesh-bg {
     position: fixed; inset: 0; pointer-events: none; z-index: 0;
     background:
-      radial-gradient(ellipse 70% 55% at 75% -15%, rgba(167,139,250,0.07) 0%, transparent 60%),
-      radial-gradient(ellipse 55% 45% at -15% 85%, rgba(0,212,200,0.06) 0%, transparent 60%),
-      radial-gradient(ellipse 45% 45% at 50% 50%, rgba(255,107,107,0.02) 0%, transparent 60%);
+      radial-gradient(ellipse 80% 60% at 70% -10%, rgba(124,58,237,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at -10% 80%, rgba(6,182,212,0.05) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 40% at 50% 50%, rgba(245,158,11,0.03) 0%, transparent 60%);
   }
 
-  /* Subtle noise texture */
   .noise {
-    position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.18;
+    position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.2;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
   }
 
-  .page-wrap {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 24px;
-    position: relative;
-    z-index: 1;
-  }
+  .page-wrap { max-width: 1200px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
 `;
 
 export default function FinSight() {
@@ -60,9 +46,6 @@ export default function FinSight() {
   const [apiStatus,   setApiStatus]   = useState("checking");
   const [error,       setError]       = useState("");
   const [downloading, setDownloading] = useState(false);
-
-  const radarRef = useRef(null);
-  const barRef   = useRef(null);
 
   useEffect(() => {
     fetch(`${API_BASE}/health`)
@@ -84,51 +67,35 @@ export default function FinSight() {
                               !!form.revenue && !!form.totalAssets;
 
   const getActiveForm = () =>
-    inputMode==="upload"    && uploadState.extracted ? {...form,...uploadState.extracted} :
+    inputMode==="upload" && uploadState.extracted ? {...form,...uploadState.extracted} :
     inputMode==="multiyear" ? {...form,...yearlyData[yearlyData.length-1]} : form;
 
   const analyze = async () => {
-    setError("");
-    setView("loading");
-    setLoadingStep(0);
+    setError(""); setView("loading"); setLoadingStep(0);
     const si = setInterval(() => setLoadingStep(p => Math.min(LOADING_STEPS.length-1,p+1)), 1200);
     const af = getActiveForm();
-
     if (parseFloat(af.revenue) < 0 || parseFloat(af.totalAssets) <= 0) {
       clearInterval(si);
       setError("Invalid Input: Revenue cannot be negative and Total Assets must be greater than zero.");
-      setView("form");
-      return;
+      setView("form"); return;
     }
-
     try {
       const res = await fetch(`${API_BASE}/api/analyze`, {
-        method: "POST",
-        headers: {"Content-Type":"application/json"},
+        method:"POST", headers:{"Content-Type":"application/json"},
         body: JSON.stringify({
-          financialData: {
-            companyName:        af.companyName||"SME Company",
-            industry:           af.industry||"General",
-            revenue:            parseFloat(af.revenue)||0,
-            prevRevenue:        parseFloat(af.prevRevenue)||null,
-            netProfit:          parseFloat(af.netProfit)||0,
-            totalAssets:        parseFloat(af.totalAssets)||0,
-            totalLiabilities:   parseFloat(af.totalLiabilities)||0,
-            currentAssets:      parseFloat(af.currentAssets)||0,
-            currentLiabilities: parseFloat(af.currentLiabilities)||1,
-            inventory:          parseFloat(af.inventory)||0,
-            operatingExpenses:  parseFloat(af.operatingExpenses)||null,
+          financialData:{
+            companyName:af.companyName||"SME Company", industry:af.industry||"General",
+            revenue:parseFloat(af.revenue)||0, prevRevenue:parseFloat(af.prevRevenue)||null,
+            netProfit:parseFloat(af.netProfit)||0, totalAssets:parseFloat(af.totalAssets)||0,
+            totalLiabilities:parseFloat(af.totalLiabilities)||0, currentAssets:parseFloat(af.currentAssets)||0,
+            currentLiabilities:parseFloat(af.currentLiabilities)||1, inventory:parseFloat(af.inventory)||0,
+            operatingExpenses:parseFloat(af.operatingExpenses)||null,
           },
           yearlyData: yearlyData.filter(y=>y.revenue).map(y=>({
-            year: y.year,
-            revenue:            parseFloat(y.revenue)||0,
-            netProfit:          parseFloat(y.netProfit)||0,
-            totalAssets:        parseFloat(y.totalAssets)||0,
-            totalLiabilities:   parseFloat(y.totalLiabilities)||0,
-            currentAssets:      parseFloat(y.currentAssets)||0,
-            currentLiabilities: parseFloat(y.currentLiabilities)||1,
-            inventory:          parseFloat(y.inventory)||0,
-            operatingExpenses:  parseFloat(y.operatingExpenses)||0,
+            year:y.year, revenue:parseFloat(y.revenue)||0, netProfit:parseFloat(y.netProfit)||0,
+            totalAssets:parseFloat(y.totalAssets)||0, totalLiabilities:parseFloat(y.totalLiabilities)||0,
+            currentAssets:parseFloat(y.currentAssets)||0, currentLiabilities:parseFloat(y.currentLiabilities)||1,
+            inventory:parseFloat(y.inventory)||0, operatingExpenses:parseFloat(y.operatingExpenses)||0,
           })),
         }),
       });
@@ -148,16 +115,13 @@ export default function FinSight() {
     if (!result) return;
     setDownloading(true);
     try {
-      let rb=null, bb=null;
-      if (radarRef.current) rb = await toPng(radarRef.current, {backgroundColor:"#0a1120"});
-      if (barRef.current)   bb = await toPng(barRef.current,   {backgroundColor:"#0a1120"});
       const af = getActiveForm();
       const response = await fetch(`${API_BASE}/api/generate-report`, {
         method:"POST", headers:{"Content-Type":"application/json"},
         body: JSON.stringify({
-          results: result,
-          formData: {companyName:af.companyName||"SME", industry:af.industry||"General"},
-          charts: {radar:rb, bar:bb},
+          results:result,
+          formData:{companyName:af.companyName||"SME", industry:af.industry||"General"},
+          charts:{},
         }),
       });
       if (!response.ok) throw new Error("Failed to generate PDF");
@@ -166,46 +130,35 @@ export default function FinSight() {
       const a    = document.createElement("a");
       a.href=url; a.download=`FinSight_Report_${af.companyName||"SME"}.pdf`;
       document.body.appendChild(a); a.click(); a.remove();
-    } catch(e) {
-      alert(`PDF error: ${e.message}`);
-    } finally {
-      setDownloading(false);
-    }
+    } catch(e) { alert(`PDF error: ${e.message}`); }
+    finally { setDownloading(false); }
   };
 
   return (
     <>
       <style>{shellStyles}</style>
       <div className="app">
-        <div className="mesh-bg"/>
-        <div className="noise"/>
-
+        <div className="mesh-bg"/><div className="noise"/>
         <div className="page-wrap">
           <Header apiStatus={apiStatus}/>
-
           {view==="form" && (
             <AnalysisForm
-              inputMode={inputMode}     setInputMode={setInputMode}
-              form={form}               setForm={setForm}
-              yearlyData={yearlyData}   setYearlyData={setYearlyData}
-              activeYear={activeYear}   setActiveYear={setActiveYear}
+              inputMode={inputMode} setInputMode={setInputMode}
+              form={form} setForm={setForm}
+              yearlyData={yearlyData} setYearlyData={setYearlyData}
+              activeYear={activeYear} setActiveYear={setActiveYear}
               uploadState={uploadState} setUploadState={setUploadState}
-              isDragOver={isDragOver}   setIsDragOver={setIsDragOver}
-              error={error}             canAnalyze={canAnalyze}
-              onAnalyze={analyze}       setError={setError}
+              isDragOver={isDragOver} setIsDragOver={setIsDragOver}
+              error={error} canAnalyze={canAnalyze}
+              onAnalyze={analyze} setError={setError}
             />
           )}
-
           {view==="loading" && <LoadingScreen loadingStep={loadingStep}/>}
-
           {view==="result" && result && (
             <ResultsDashboard
-              result={result}
-              animScore={animScore}
-              form={form}
-              inputMode={inputMode}
-              uploadState={uploadState}
-              yearlyData={yearlyData}
+              result={result} animScore={animScore}
+              form={form} inputMode={inputMode}
+              uploadState={uploadState} yearlyData={yearlyData}
               downloading={downloading}
               onBack={() => setView("form")}
               onDownloadPDF={downloadPDF}
