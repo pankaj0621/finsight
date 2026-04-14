@@ -1,6 +1,6 @@
 // =============================================================================
-//  LoadingScreen — Midnight Aurora Theme
-//  FIX: loading-step text was var(--text4) = #334155, invisible on dark bg
+//  LoadingScreen — Original theme, text fixed
+//  FIX: loading-step was var(--text4)=#334155 — invisible → now var(--text3)
 // =============================================================================
 
 import { LOADING_STEPS } from "../utils/constants.js";
@@ -14,43 +14,38 @@ const loadingStyles = `
 
   .loader-ring {
     width: 60px; height: 60px; border-radius: 50%;
-    border: 2px solid rgba(0,212,200,0.12);
-    border-top-color: #00d4c8;
-    box-shadow: 0 0 20px rgba(0,212,200,0.15);
+    border: 2px solid rgba(255,255,255,0.05);
+    border-top-color: var(--amber);
     animation: spin 0.9s linear infinite;
   }
 
-  /* FIX: explicit color for loading title */
+  /* FIX: was defaulting to inherit — now explicit */
   .loading-title {
     font-family: var(--font-mono); font-size: 12px;
-    color: #a0bfd0;
+    color: var(--text2);
     letter-spacing: 0.12em; text-transform: uppercase;
   }
 
-  .loading-steps {
-    display: flex; flex-direction: column;
-    gap: 8px; align-items: flex-start;
-  }
+  .loading-steps { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
 
-  /* FIX: was var(--text4) = #334155 — nearly invisible on #060b14 background
-     Now using #4a6b82 which is readable */
+  /* FIX: was var(--text4)=#334155 — nearly invisible on #0c0e14
+     Now var(--text3)=#7a9ab0 which is clearly readable */
   .loading-step {
     font-family: var(--font-mono); font-size: 11px;
-    color: #4a6b82;
-    letter-spacing: 0.05em;
-    transition: color 0.4s;
+    color: var(--text3);
+    letter-spacing: 0.05em; transition: color 0.4s;
     display: flex; align-items: center; gap: 10px;
   }
 
   .loading-step::before { content: '○'; font-size: 10px; }
 
-  /* Active step — bright teal */
-  .loading-step.active { color: #00d4c8; }
-  .loading-step.active::before { content: '◉'; color: #00d4c8; }
+  /* Active = cyan, clearly visible */
+  .loading-step.active { color: var(--cyan); }
+  .loading-step.active::before { content: '◉'; color: var(--cyan); }
 
-  /* Done step — mint green */
-  .loading-step.done { color: #34d399; }
-  .loading-step.done::before { content: '✓'; color: #34d399; }
+  /* Done = amber, clearly visible */
+  .loading-step.done { color: var(--amber); }
+  .loading-step.done::before { content: '✓'; color: var(--amber); }
 `;
 
 export default function LoadingScreen({ loadingStep }) {
