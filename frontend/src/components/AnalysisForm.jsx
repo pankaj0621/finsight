@@ -82,7 +82,7 @@ const formStyles = `
     font-family: var(--font-mono); font-size: 11px;
     color: var(--text2);
     background: none; border: none; cursor: pointer;
-    transition: all 0.2s; letter-spacing: 0.05em;
+    transition: border-color 0.2s ease, color 0.15s ease; letter-spacing: 0.05em;
   }
 
   .mode-tab:hover { color: var(--text); }
@@ -114,7 +114,7 @@ const formStyles = `
     border-radius: 20px;
     font-family: var(--font-mono); font-size: 11px;
     color: var(--text2);
-    cursor: pointer; transition: all 0.2s;
+    cursor: pointer; transition: border-color 0.2s ease, color 0.15s ease;
   }
 
   .demo-chip:hover {
@@ -157,7 +157,7 @@ const formStyles = `
     color: var(--text);
     padding: 11px 14px; border-radius: var(--r-sm);
     font-family: var(--font-mono); font-size: 13px;
-    outline: none; transition: all 0.2s; -webkit-appearance: none;
+    outline: none; transition: border-color 0.2s ease, color 0.15s ease; -webkit-appearance: none;
   }
 
   .field input:focus, .field select:focus {
@@ -181,12 +181,12 @@ const formStyles = `
     border: none; border-radius: var(--r-sm);
     font-family: var(--font-display); font-size: 15px; font-weight: 700;
     cursor: pointer; letter-spacing: 0.01em;
-    transition: all 0.25s; margin-top: 8px;
+    transition: border-color 0.2s ease; margin-top: 8px;
     box-shadow: 0 0 30px rgba(245,158,11,0.25);
   }
 
-  .btn-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 40px rgba(245,158,11,0.35); }
-  .btn-cta:active { transform: translateY(0); }
+  .btn-cta:hover { transform: translate3d(0,-2px,0); box-shadow: 0 8px 40px rgba(245,158,11,0.35); }
+  .btn-cta:active { transform: translate3d(0,0,0); }
   .btn-cta:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
 
   /* ── Error ── */
@@ -202,7 +202,7 @@ const formStyles = `
   .upload-zone {
     border: 2px dashed rgba(255,255,255,0.08); border-radius: var(--r);
     padding: 60px 40px; text-align: center; cursor: pointer;
-    transition: all 0.3s; position: relative; overflow: hidden;
+    transition: border-color 0.25s ease; position: relative; overflow: hidden;
     background: rgba(255,255,255,0.015); margin-bottom: 20px;
   }
 
@@ -274,7 +274,7 @@ const formStyles = `
     padding: 6px 14px; background: var(--glass); border: 1px solid var(--glass-border);
     border-radius: 20px; font-family: var(--font-mono); font-size: 11px;
     color: var(--text2);
-    cursor: pointer; transition: all 0.2s;
+    cursor: pointer; transition: border-color 0.2s ease, color 0.15s ease;
   }
 
   .year-tab.active {
@@ -287,7 +287,7 @@ const formStyles = `
     border: 1px dashed rgba(255,255,255,0.1); border-radius: 20px;
     font-family: var(--font-mono); font-size: 11px;
     color: var(--text3);
-    cursor: pointer; transition: all 0.2s;
+    cursor: pointer; transition: border-color 0.2s ease, color 0.15s ease;
   }
 
   .add-year-btn:hover { border-color: var(--cyan); color: var(--cyan); }

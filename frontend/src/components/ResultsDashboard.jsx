@@ -41,16 +41,24 @@ const CustomTooltip = ({ active, payload, label }) => {
 const TICK = { fill:"#7a9ab0", fontSize:10, fontFamily:"'Fira Code',monospace" };
 
 const dashStyles = `
-  .results-wrap { padding-bottom: 120px; animation: fadeUp 0.5s cubic-bezier(0.22,1,0.36,1); }
+  .results-wrap {
+    padding-bottom: 120px;
+    /* PERF: hint browser about upcoming animation */
+    will-change: opacity, transform;
+    animation: fadeUp 0.4s cubic-bezier(0.22,1,0.36,1) forwards;
+  }
+  /* PERF: remove will-change after animation — don't keep GPU layer forever */
+  .results-wrap.loaded { will-change: auto; }
 
   .topbar { display: flex; align-items: center; gap: 10px; margin-bottom: 26px; flex-wrap: wrap; }
 
   .btn-back {
     display: flex; align-items: center; gap: 7px;
-    background: var(--glass); border: 1px solid var(--glass-border);
+    background: rgba(16,18,26,0.82); border: 1px solid var(--glass-border);
     color: var(--text2);
     padding: 9px 16px; border-radius: var(--r-sm);
-    font-family: var(--font-mono); font-size: 11px; cursor: pointer; transition: all 0.2s;
+    font-family: var(--font-mono); font-size: 11px; cursor: pointer;
+    transition: border-color 0.2s ease, color 0.15s ease;
   }
   .btn-back:hover { border-color: rgba(255,255,255,0.15); color: var(--text); }
 
@@ -60,7 +68,7 @@ const dashStyles = `
     color: var(--amber);
     padding: 9px 16px; border-radius: var(--r-sm);
     font-family: var(--font-mono); font-size: 11px; font-weight: 600;
-    cursor: pointer; transition: all 0.2s;
+    cursor: pointer; transition: border-color 0.2s ease, transform 0.2s ease;
   }
   .btn-pdf:hover { background: rgba(245,158,11,0.18); }
   .btn-pdf:disabled { opacity: 0.4; cursor: not-allowed; }
@@ -85,16 +93,20 @@ const dashStyles = `
   .card {
     border-radius: var(--r); padding: 22px;
     background: var(--glass); border: 1px solid var(--glass-border);
-    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    /* PERF: backdrop-filter removed from cards — it forces GPU compositing on
+       EVERY scrolled card which kills scroll FPS. Use solid bg instead. */
+    background: rgba(16,18,26,0.82);
     position: relative; overflow: hidden;
-    transition: border-color 0.25s, transform 0.2s;
+    /* PERF: translate3d promotes to GPU layer — hover transform is smooth */
+    transform: translateZ(0);
+    transition: border-color 0.2s ease, transform 0.2s ease;
   }
   .card::before {
     content: ''; position: absolute; inset: 0; border-radius: inherit;
     background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, transparent 55%);
     pointer-events: none;
   }
-  .card:hover { border-color: rgba(255,255,255,0.1); transform: translateY(-1px); }
+  .card:hover { border-color: rgba(255,255,255,0.1); transform: translate3d(0,-2px,0); }
   .card.span2 { grid-column: span 2; }
   .card.span3 { grid-column: span 3; }
   @media(max-width:900px){ .card.span2 { grid-column: span 2; } .card.span3 { grid-column: span 2; } }
@@ -119,7 +131,8 @@ const dashStyles = `
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
     gap: 14px; min-height: 240px; text-align: center;
-    transition: border-color 0.5s, box-shadow 0.5s;
+    /* PERF: box-shadow transition removed — causes repaint on every frame */
+    transition: border-color 0.4s ease;
   }
   .score-card.grade-A { border-color: rgba(245,158,11,0.35); box-shadow: 0 0 60px rgba(245,158,11,0.1); }
   .score-card.grade-B { border-color: rgba(6,182,212,0.3);   box-shadow: 0 0 60px rgba(6,182,212,0.08); }
@@ -178,11 +191,14 @@ const dashStyles = `
   /* Metric tiles */
   .metrics-bento { display: grid; grid-template-columns: repeat(auto-fill, minmax(155px,1fr)); gap: 10px; margin-bottom: 12px; }
   .metric-tile {
-    background: var(--glass); border: 1px solid var(--glass-border);
+    background: rgba(16,18,26,0.82); border: 1px solid var(--glass-border);
     border-radius: var(--r-sm); padding: 16px 14px;
-    transition: all 0.2s; position: relative; overflow: hidden;
+    /* PERF: GPU layer promotion */
+    transform: translateZ(0);
+    transition: border-color 0.2s ease, transform 0.2s ease;
+    position: relative; overflow: hidden;
   }
-  .metric-tile:hover { border-color: rgba(255,255,255,0.1); transform: translateY(-1px); }
+  .metric-tile:hover { border-color: rgba(255,255,255,0.1); transform: translate3d(0,-2px,0); }
 
   /* FIX: tile labels and sub all var(--text3) = readable */
   .mt-label { font-family: var(--font-mono); font-size: 9px; color: var(--text3); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; }
@@ -245,7 +261,7 @@ const dashStyles = `
   .rec-item {
     background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);
     border-left: 3px solid transparent; border-radius: var(--r-sm);
-    padding: 14px; margin-bottom: 10px; transition: all 0.2s;
+    padding: 14px; margin-bottom: 10px; transition: border-color 0.2s ease, transform 0.2s ease;
   }
   .rec-item:last-child { margin-bottom: 0; }
   .rec-item:hover { background: rgba(255,255,255,0.04); }
@@ -268,7 +284,9 @@ const dashStyles = `
     border-radius: var(--r); padding: 24px;
     background: linear-gradient(135deg, rgba(124,58,237,0.05) 0%, rgba(6,182,212,0.03) 100%);
     border: 1px solid rgba(124,58,237,0.2);
-    backdrop-filter: blur(20px); margin-bottom: 12px; position: relative; overflow: hidden;
+    /* PERF: backdrop-filter removed from inline elements */
+    background: rgba(20,18,32,0.88);
+    margin-bottom: 12px; position: relative; overflow: hidden;
   }
   .sim-panel::before {
     content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
@@ -307,7 +325,7 @@ const dashStyles = `
     background: linear-gradient(135deg, rgba(124,58,237,0.2), rgba(124,58,237,0.1));
     border: 1px solid rgba(124,58,237,0.4); color: #c4b5fd;
     border-radius: var(--r-sm); font-family: var(--font-mono); font-size: 11px; font-weight: 600;
-    cursor: pointer; transition: all 0.2s; letter-spacing: 0.06em; text-transform: uppercase;
+    cursor: pointer; transition: border-color 0.2s ease, transform 0.2s ease; letter-spacing: 0.06em; text-transform: uppercase;
   }
   .btn-sim:hover { background: rgba(124,58,237,0.28); box-shadow: 0 0 24px rgba(124,58,237,0.3); }
   .btn-sim:disabled { opacity: 0.4; cursor: not-allowed; }
@@ -335,9 +353,9 @@ const dashStyles = `
     border: none; cursor: pointer;
     display: flex; align-items: center; justify-content: center;
     font-size: 20px; box-shadow: 0 4px 24px rgba(6,182,212,0.4);
-    transition: all 0.25s; z-index: 200;
+    transition: border-color 0.2s ease, transform 0.2s ease; z-index: 200;
   }
-  .chat-fab:hover { transform: scale(1.08); box-shadow: 0 8px 32px rgba(6,182,212,0.5); }
+  .chat-fab:hover { transform: scale3d(1.08,1.08,1); box-shadow: 0 8px 32px rgba(6,182,212,0.5); }
 
   .chat-panel {
     position: fixed; bottom: 90px; right: 28px;
@@ -347,7 +365,9 @@ const dashStyles = `
     border-radius: var(--r); backdrop-filter: blur(32px);
     display: flex; flex-direction: column; z-index: 200;
     box-shadow: 0 24px 60px rgba(0,0,0,0.6);
-    animation: slideUp 0.25s cubic-bezier(0.22,1,0.36,1);
+    /* PERF: will-change hints GPU layer for animation */
+    will-change: opacity, transform;
+    animation: slideUp 0.25s cubic-bezier(0.22,1,0.36,1) forwards;
     overflow: hidden;
   }
   @media(max-width:480px){ .chat-panel { left:16px; right:16px; width:auto; bottom:80px; } }
@@ -383,7 +403,7 @@ const dashStyles = `
     padding: 4px 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
     border-radius: 20px; font-family: var(--font-mono); font-size: 10px;
     color: var(--text3);
-    cursor: pointer; transition: all 0.2s;
+    cursor: pointer; transition: border-color 0.2s ease, transform 0.2s ease;
   }
   .chat-qbtn:hover { border-color: var(--cyan); color: var(--cyan); }
   .chat-input-wrap { padding: 12px 14px; border-top: 1px solid rgba(255,255,255,0.05); display: flex; gap: 8px; }
@@ -401,7 +421,7 @@ const dashStyles = `
   .chat-send {
     padding: 9px 14px; background: var(--cyan); color: #0c0e14;
     border: none; border-radius: var(--r-xs); font-family: var(--font-mono);
-    font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.2s; white-space: nowrap;
+    font-size: 11px; font-weight: 700; cursor: pointer; transition: border-color 0.2s ease, transform 0.2s ease; white-space: nowrap;
   }
   .chat-send:hover { background: #22d3ee; }
   .chat-send:disabled { opacity: 0.4; cursor: not-allowed; }
