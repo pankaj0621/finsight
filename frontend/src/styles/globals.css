@@ -1,7 +1,7 @@
 /* =============================================================================
    FinSight v4 — Global Styles
    Theme: Deep Slate + Amber Gold (ORIGINAL — unchanged)
-   PERFORMANCE: GPU-optimized, 60fps smooth scrolling
+   TEXT COLORS ONLY fixed for visibility
 ============================================================================= */
 
 @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500&display=swap');
@@ -9,16 +9,19 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
+  /* ── Backgrounds — ORIGINAL UNCHANGED ── */
   --bg:  #0c0e14;
   --bg2: #10121a;
   --bg3: #141720;
   --surface:  rgba(20,23,32,0.9);
   --surface2: rgba(28,32,44,0.85);
 
+  /* ── Glass — ORIGINAL UNCHANGED ── */
   --glass:        rgba(255,255,255,0.032);
   --glass-border: rgba(255,255,255,0.07);
   --glass-hover:  rgba(255,255,255,0.055);
 
+  /* ── Brand Colors — ORIGINAL UNCHANGED ── */
   --amber:      #f59e0b;
   --amber-dim:  rgba(245,158,11,0.12);
   --amber-glow: rgba(245,158,11,0.22);
@@ -39,28 +42,32 @@
   --orange:     #f97316;
   --orange-dim: rgba(249,115,22,0.1);
 
-  /* TEXT — fixed for visibility */
-  --text:  #f0f4f8;
-  --text2: #b8ccd8;
-  --text3: #7a9ab0;
-  --text4: #4a7a94;
+  /* ── TEXT — FIXED for dark bg visibility ──
+     Original text3=#475569, text4=#334155 were invisible on #0c0e14.
+     Now: text=white, text2=light, text3=readable muted, text4=subtle only
+  ── */
+  --text:  #f0f4f8;   /* Crisp white-blue — headlines, values, main content */
+  --text2: #b8ccd8;   /* Readable muted — secondary info, descriptions */
+  --text3: #7a9ab0;   /* Visible subtle — labels, section titles, captions */
+  --text4: #4a7a94;   /* Dim — placeholders ONLY, never body text */
 
+  /* ── Fonts — ORIGINAL UNCHANGED ── */
   --font-display: 'Sora', sans-serif;
   --font-body:    'Space Grotesk', sans-serif;
   --font-mono:    'Fira Code', monospace;
 
+  /* ── Radius — ORIGINAL UNCHANGED ── */
   --r:    14px;
   --r-sm: 9px;
   --r-xs: 6px;
 
+  /* ── Shadows — ORIGINAL UNCHANGED ── */
   --shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
   --shadow-md: 0 4px 20px rgba(0,0,0,0.4);
   --shadow-lg: 0 8px 40px rgba(0,0,0,0.5);
 }
 
-html {
-  scroll-behavior: smooth;
-}
+html { scroll-behavior: smooth; }
 
 body {
   background: var(--bg);
@@ -68,20 +75,20 @@ body {
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
-
-  /* PERF: enable GPU compositing for whole page */
-  -webkit-overflow-scrolling: touch;
 }
 
-/* ── SCROLLBAR ── */
+/* Scrollbar */
 ::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
 
-/* ══════════════════════════════════════════════
-   RECHARTS TOOLTIP — BLACK TEXT BUG FIX
-══════════════════════════════════════════════ */
+/* =======================================================
+   RECHARTS — BLACK TEXT BUG COMPLETE FIX
+   Problem: recharts renders raw <p> <span> inside tooltip
+   which inherit browser default black color.
+   Fix: override ALL descendants explicitly.
+======================================================= */
 .recharts-tooltip-wrapper *,
 .recharts-default-tooltip,
 .recharts-default-tooltip * {
@@ -105,12 +112,23 @@ body {
   margin-bottom: 5px !important;
 }
 
-.recharts-tooltip-item        { color: #f0f4f8 !important; font-size: 12px !important; }
-.recharts-tooltip-item-name   { color: #b8ccd8 !important; }
-.recharts-tooltip-item-value  { color: #f59e0b !important; font-weight: 600 !important; }
+.recharts-tooltip-item {
+  color: #f0f4f8 !important;
+  font-size: 12px !important;
+}
 
+.recharts-tooltip-item-name  { color: #b8ccd8 !important; }
+.recharts-tooltip-item-value { color: #f59e0b !important; font-weight: 600 !important; }
+
+/* RadarChart polar angle axis labels — SVG uses fill not color */
 .recharts-polar-angle-axis-tick text,
-.recharts-polar-angle-axis-tick-value,
+.recharts-polar-angle-axis-tick-value {
+  fill: #7a9ab0 !important;
+  font-family: 'Fira Code', monospace !important;
+  font-size: 10px !important;
+}
+
+/* Cartesian axis ticks — same SVG fill fix */
 .recharts-cartesian-axis-tick text,
 .recharts-cartesian-axis-tick-value {
   fill: #7a9ab0 !important;
@@ -118,52 +136,10 @@ body {
   font-size: 10px !important;
 }
 
-/* ══════════════════════════════════════════════
-   PERFORMANCE — GPU PROMOTION RULES
-   
-   Rule 1: Only animate transform + opacity — never width/height/top/left
-   Rule 2: Use will-change sparingly — only on interactive hover elements
-   Rule 3: backdrop-filter only on fixed/sticky elements, not scrollable cards
-   Rule 4: No transition:all — always specify exact properties
-══════════════════════════════════════════════ */
-
-/* Promote sticky header to its own GPU layer */
-.header {
-  will-change: auto; /* header is sticky — already promoted */
-  transform: translateZ(0);
-}
-
-/* Card hover — GPU layer created at hover time */
-.card,
-.metric-tile,
-.rec-item {
-  /* PERF: translateZ(0) tells browser to composite this element */
-  transform: translateZ(0);
-  /* PERF: will-change creates GPU layer — only on hover-targeted elements */
-  transition:
-    border-color 0.2s ease,
-    transform 0.2s ease;
-    /* REMOVED: box-shadow — expensive, causes repaint */
-}
-
-/* ── Keyframe Animations ── */
+/* Animations */
 @keyframes spin    { to { transform: rotate(360deg); } }
+@keyframes fadeUp  { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
 @keyframes blink   { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
-@keyframes slideUp {
-  from { opacity:0; transform:translate3d(0,14px,0) scale(0.97); }
-  to   { opacity:1; transform:translate3d(0,0,0)    scale(1); }
-}
-@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+@keyframes slideUp { from { opacity:0; transform:translateY(14px) scale(0.97); } to { opacity:1; transform:translateY(0) scale(1); } }
+@keyframes pulse   { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
 @keyframes shimmer { from{background-position:-200% 0} to{background-position:200% 0} }
-
-/* PERF: fadeUp using transform3d — keeps element on GPU */
-@keyframes fadeUp {
-  from { opacity:0; transform:translate3d(0,20px,0); }
-  to   { opacity:1; transform:translate3d(0,0,0); }
-}
-
-/* Score ring — GPU composited via transform */
-@keyframes ringFill {
-  from { stroke-dashoffset: 327; }
-  to   { stroke-dashoffset: var(--target-offset, 0); }
-}
