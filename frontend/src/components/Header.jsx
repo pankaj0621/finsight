@@ -6,13 +6,10 @@ const headerStyles = `
   .header {
     display: flex; align-items: center; justify-content: space-between;
     padding: 16px 0; position: sticky; top: 0; z-index: 100;
-    background: rgba(12,14,20,0.88);
-    /* PERF: sticky header auto-promoted. backdrop-filter creates own layer. */
-    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    background: rgba(12,14,20,0.85);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
     border-bottom: 1px solid rgba(255,255,255,0.06);
     margin: 0 -24px; padding-left: 24px; padding-right: 24px;
-    /* PERF: force GPU layer — prevents scroll-triggered repaints */
-    transform: translateZ(0);
   }
 
   .logo { display: flex; align-items: center; gap: 12px; }
