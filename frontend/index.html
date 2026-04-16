@@ -2,37 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#0c0e14" />
-    <title>FinSight — AI Financial Health Scoring</title>
-
-    <!-- PERF: Preconnect to Google Fonts to reduce DNS + TLS latency -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-
-    <!-- PERF: Critical inline styles — prevents FOUC (flash of unstyled content) -->
-    <style>
-      /* Minimal critical CSS — painted before JS loads */
-      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-      html { scroll-behavior: smooth; }
-      body {
-        background: #0c0e14;
-        color: #f0f4f8;
-        font-family: 'Space Grotesk', system-ui, sans-serif;
-        -webkit-font-smoothing: antialiased;
-        overflow-x: hidden;
-        /* PERF: GPU scroll compositing */
-        -webkit-overflow-scrolling: touch;
-      }
-      #root { min-height: 100vh; }
-
-      /* PERF: Prevent layout shift during font load */
-      @font-face {
-        font-family: 'Space Grotesk';
-        font-display: swap; /* show fallback font immediately */
-      }
-    </style>
+    <title>FinSight — SME Financial Analytics</title>
   </head>
   <body>
     <div id="root"></div>
