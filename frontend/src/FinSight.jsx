@@ -12,8 +12,6 @@ import LoadingScreen    from "./components/LoadingScreen.jsx";
 import ResultsDashboard from "./components/ResultsDashboard.jsx";
 import { API_BASE, EMPTY_FORM, LOADING_STEPS } from "./utils/constants.js";
 import "./styles/globals.css";
-import { animateNumber } from "./utils/performance.js";
-import { financialSchema } from "./utils/validation.js";
 
 const shellStyles = `
   .app { min-height: 100vh; background: var(--bg); position: relative; overflow-x: clip; }
@@ -56,12 +54,12 @@ export default function FinSight() {
   }, []);
 
   useEffect(() => {
-  if (view === "result" && result) {
-    animateNumber(0, result.totalScore, 1200, (val) => {
-      setAnimScore(val);
-    });
-  }
-}, [view, result]);
+    if (view==="result" && result) {
+      let s = 0; const end = result.totalScore;
+      const step = () => { s+=2; setAnimScore(Math.min(s,end)); if(s<end) requestAnimationFrame(step); };
+      requestAnimationFrame(step);
+    }
+  }, [view, result]);
 
   const canAnalyze =
     inputMode==="upload"    ? uploadState.status==="done" :
@@ -73,65 +71,40 @@ export default function FinSight() {
     inputMode==="multiyear" ? {...form,...yearlyData[yearlyData.length-1]} : form;
 
   const analyze = async () => {
-    setError("");
+    setError(""); setView("loading"); setLoadingStep(0);
+    const si = setInterval(() => setLoadingStep(p => Math.min(LOADING_STEPS.length-1,p+1)), 1200);
     const af = getActiveForm();
-
-    // 1. Validate the form data using the Zod schema from validation.js
-    const validation = financialSchema.safeParse(af);
-
-    // 2. If validation fails, stop and show the error message
-    if (!validation.success) {
-      // Get the first error message provided by Zod
-      const firstError = validation.error.errors[0].message;
-      setError(`Validation Error: ${firstError}`);
-      return;
+    if (parseFloat(af.revenue) < 0 || parseFloat(af.totalAssets) <= 0) {
+      clearInterval(si);
+      setError("Invalid Input: Revenue cannot be negative and Total Assets must be greater than zero.");
+      setView("form"); return;
     }
-
-    // 3. If validation passes, proceed to the loading state
-    setView("loading");
-    setLoadingStep(0);
-    const si = setInterval(() => {
-      setLoadingStep(p => Math.min(LOADING_STEPS.length - 1, p + 1));
-    }, 1200);
-
     try {
-      // Use the "validatedData" which Zod has already coerced into proper numbers
-      const validatedData = validation.data;
-
       const res = await fetch(`${API_BASE}/api/analyze`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method:"POST", headers:{"Content-Type":"application/json"},
         body: JSON.stringify({
-          financialData: {
-            ...validatedData,
-            companyName: validatedData.companyName || "SME Company",
-            industry: validatedData.industry || "General",
+          financialData:{
+            companyName:af.companyName||"SME Company", industry:af.industry||"General",
+            revenue:parseFloat(af.revenue)||0, prevRevenue:parseFloat(af.prevRevenue)||null,
+            netProfit:parseFloat(af.netProfit)||0, totalAssets:parseFloat(af.totalAssets)||0,
+            totalLiabilities:parseFloat(af.totalLiabilities)||0, currentAssets:parseFloat(af.currentAssets)||0,
+            currentLiabilities:parseFloat(af.currentLiabilities)||1, inventory:parseFloat(af.inventory)||0,
+            operatingExpenses:parseFloat(af.operatingExpenses)||null,
           },
-          yearlyData: yearlyData.filter(y => y.revenue).map(y => ({
-            year: y.year,
-            revenue: parseFloat(y.revenue) || 0,
-            netProfit: parseFloat(y.netProfit) || 0,
-            totalAssets: parseFloat(y.totalAssets) || 0,
-            totalLiabilities: parseFloat(y.totalLiabilities) || 0,
-            currentAssets: parseFloat(y.currentAssets) || 0,
-            currentLiabilities: parseFloat(y.currentLiabilities) || 1,
-            inventory: parseFloat(y.inventory) || 0,
-            operatingExpenses: parseFloat(y.operatingExpenses) || 0,
+          yearlyData: yearlyData.filter(y=>y.revenue).map(y=>({
+            year:y.year, revenue:parseFloat(y.revenue)||0, netProfit:parseFloat(y.netProfit)||0,
+            totalAssets:parseFloat(y.totalAssets)||0, totalLiabilities:parseFloat(y.totalLiabilities)||0,
+            currentAssets:parseFloat(y.currentAssets)||0, currentLiabilities:parseFloat(y.currentLiabilities)||1,
+            inventory:parseFloat(y.inventory)||0, operatingExpenses:parseFloat(y.operatingExpenses)||0,
           })),
         }),
       });
-
-      if (!res.ok) {
-        const e = await res.json();
-        throw new Error(e.detail || `Error ${res.status}`);
-      }
-
+      if (!res.ok) { const e = await res.json(); throw new Error(e.detail||`Error ${res.status}`); }
       const data = await res.json();
       clearInterval(si);
-      setResult(data);
-      setAnimScore(0);
+      setResult(data); setAnimScore(0);
       setTimeout(() => setView("result"), 300);
-    } catch (e) {
+    } catch(e) {
       clearInterval(si);
       setError(`Analysis failed: ${e.message}`);
       setView("form");

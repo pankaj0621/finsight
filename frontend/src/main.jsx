@@ -8,12 +8,3 @@ createRoot(document.getElementById("root")).render(
     <FinSight />
   </StrictMode>
 );
-import ErrorBoundary from "./components/ErrorBoundary.jsx";
-
-createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <ErrorBoundary>
-      <FinSight />
-    </ErrorBoundary>
-  </StrictMode>
-);
