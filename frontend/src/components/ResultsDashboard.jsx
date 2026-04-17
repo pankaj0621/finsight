@@ -22,23 +22,23 @@ const CustomTooltip = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null;
   return (
     <div style={{
-      background:"rgba(16,18,26,0.97)",
+      background:"rgba(255,255,255,0.98)",
       border:"1px solid rgba(245,158,11,0.2)",
       borderRadius:8, padding:"10px 14px",
       fontFamily:"'Fira Code',monospace", fontSize:11,
-      color:"#f0f4f8",
+      color:"#0a0a0a",
       boxShadow:"0 8px 32px rgba(0,0,0,0.6)"
     }}>
-      {label && <p style={{color:"#b8ccd8",fontSize:10,textTransform:"uppercase",letterSpacing:"0.06em",marginBottom:5}}>{label}</p>}
+      {label && <p style={{color:"#374151",fontSize:10,textTransform:"uppercase",letterSpacing:"0.06em",marginBottom:5}}>{label}</p>}
       {payload.map((p,i) => (
-        <p key={i} style={{color:"#f0f4f8"}}>{p.name}: <span style={{color:"#f59e0b",fontWeight:600}}>{p.value}</span></p>
+        <p key={i} style={{color:"#0a0a0a"}}>{p.name}: <span style={{color:"#b45309",fontWeight:600}}>{p.value}</span></p>
       ))}
     </div>
   );
 };
 
 // Explicit hex tick fill — SVG ignores CSS custom properties
-const TICK = { fill:"#7a9ab0", fontSize:10, fontFamily:"'Fira Code',monospace" };
+const TICK = { fill:"#6b7280", fontSize:10, fontFamily:"'Fira Code',monospace" };
 
 const dashStyles = `
   .results-wrap { padding-bottom: 120px; animation: fadeUp 0.5s cubic-bezier(0.22,1,0.36,1); }
@@ -73,7 +73,7 @@ const dashStyles = `
     display: flex; align-items: center; gap: 12px;
     margin: 30px 0 14px;
   }
-  .sdiv::before, .sdiv::after { content:''; flex:1; height:1px; background:rgba(255,255,255,0.06); }
+  .sdiv::before, .sdiv::after { content:''; flex:1; height:1px; background:rgba(0,0,0,0.08); }
 
   /* Bento grids */
   .bento3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 12px; }
@@ -94,7 +94,7 @@ const dashStyles = `
     background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, transparent 55%);
     pointer-events: none;
   }
-  .card:hover { border-color: rgba(255,255,255,0.1); transform: translateY(-1px); }
+  .card:hover { border-color: rgba(0,0,0,0.14); transform: translateY(-1px); }
   .card.span2 { grid-column: span 2; }
   .card.span3 { grid-column: span 3; }
   @media(max-width:900px){ .card.span2 { grid-column: span 2; } .card.span3 { grid-column: span 2; } }
@@ -131,7 +131,7 @@ const dashStyles = `
     display: flex; align-items: center; justify-content: center; flex-shrink: 0;
   }
   .score-ring-wrap svg { position: absolute; inset: 0; transform: rotate(-90deg); }
-  .score-ring-track { fill: none; stroke: rgba(255,255,255,0.06); stroke-width: 6; }
+  .score-ring-track { fill: none; stroke: rgba(0,0,0,0.08); stroke-width: 6; }
   .score-ring-fill {
     fill: none; stroke-width: 6; stroke-linecap: round;
     transition: stroke-dashoffset 1.2s cubic-bezier(0.22,1,0.36,1);
@@ -163,14 +163,14 @@ const dashStyles = `
   /* Altman */
   .altman-score { font-family: var(--font-mono); font-size: 48px; font-weight: 600; line-height: 1; margin: 8px 0; }
   .altman-zone { font-family: var(--font-mono); font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 4px; display: inline-block; }
-  .altman-bar { height: 5px; background: rgba(255,255,255,0.06); border-radius: 3px; overflow: hidden; margin: 16px 0 6px; }
+  .altman-bar { height: 5px; background: rgba(0,0,0,0.08); border-radius: 3px; overflow: hidden; margin: 16px 0 6px; }
   .altman-bar-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, #f43f5e, #f97316, #f59e0b); transition: width 1.5s cubic-bezier(0.22,1,0.36,1); }
   /* FIX: marker text */
   .altman-markers { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 9px; color: var(--text3); }
 
   /* Invest */
   .invest-big { font-family: var(--font-mono); font-size: 56px; font-weight: 600; line-height: 1; }
-  .invest-bar { height: 5px; background: rgba(255,255,255,0.06); border-radius: 3px; overflow: hidden; margin: 12px 0 6px; }
+  .invest-bar { height: 5px; background: rgba(0,0,0,0.08); border-radius: 3px; overflow: hidden; margin: 12px 0 6px; }
   .invest-bar-fill { height: 100%; border-radius: 3px; transition: width 1.4s cubic-bezier(0.22,1,0.36,1); }
   /* FIX: verdict text explicit */
   .invest-verdict { font-size: 12px; color: var(--text2); line-height: 1.6; margin-top: 8px; }
@@ -178,17 +178,17 @@ const dashStyles = `
   /* Metric tiles */
   .metrics-bento { display: grid; grid-template-columns: repeat(auto-fill, minmax(155px,1fr)); gap: 10px; margin-bottom: 12px; }
   .metric-tile {
-    background: var(--glass); border: 1px solid var(--glass-border);
+    background: #f9f9f9; border: 1px solid rgba(0,0,0,0.08);
     border-radius: var(--r-sm); padding: 16px 14px;
     transition: all 0.2s; position: relative; overflow: hidden;
   }
-  .metric-tile:hover { border-color: rgba(255,255,255,0.1); transform: translateY(-1px); }
+  .metric-tile:hover { border-color: rgba(0,0,0,0.14); transform: translateY(-1px); }
 
   /* FIX: tile labels and sub all var(--text3) = readable */
   .mt-label { font-family: var(--font-mono); font-size: 9px; color: var(--text3); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; }
   .mt-value { font-family: var(--font-mono); font-size: 22px; font-weight: 600; line-height: 1; margin-bottom: 4px; }
   .mt-sub   { font-size: 10px; color: var(--text3); margin-bottom: 10px; }
-  .mt-bar   { height: 2px; background: rgba(255,255,255,0.06); border-radius: 1px; overflow: hidden; }
+  .mt-bar   { height: 2px; background: rgba(0,0,0,0.08); border-radius: 1px; overflow: hidden; }
   .mt-bar-fill { height: 100%; border-radius: 1px; transition: width 1s cubic-bezier(0.22,1,0.36,1); }
 
   /* SHAP */
@@ -196,7 +196,7 @@ const dashStyles = `
   /* FIX: shap label explicit var(--text2) */
   .shap-lbl { font-family: var(--font-mono); font-size: 11px; color: var(--text2); width: 120px; flex-shrink: 0; text-align: right; }
   .shap-bar-area { flex: 1; height: 18px; position: relative; display: flex; align-items: center; }
-  .shap-zero-line { position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: rgba(255,255,255,0.08); }
+  .shap-zero-line { position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: rgba(0,0,0,0.10); }
   .shap-bar-pos { position: absolute; left: 50%; height: 12px; border-radius: 2px; background: linear-gradient(90deg, rgba(245,158,11,0.5), rgba(245,158,11,0.9)); }
   .shap-bar-neg { position: absolute; right: 50%; height: 12px; border-radius: 2px; background: linear-gradient(90deg, rgba(244,63,94,0.9), rgba(244,63,94,0.5)); }
   .shap-pts { font-family: var(--font-mono); font-size: 11px; width: 52px; flex-shrink: 0; text-align: right; }
@@ -204,7 +204,7 @@ const dashStyles = `
   /* Insights */
   .insight-row {
     display: flex; gap: 12px; padding: 14px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.04); align-items: flex-start;
+    border-bottom: 1px solid rgba(0,0,0,0.06); align-items: flex-start;
   }
   .insight-row:last-child { border-bottom: none; padding-bottom: 0; }
   .insight-bar { width: 3px; border-radius: 2px; flex-shrink: 0; align-self: stretch; min-height: 36px; }
@@ -227,7 +227,7 @@ const dashStyles = `
   .bm-row { display: flex; align-items: center; gap: 6px; }
   /* FIX: bm-who explicit var(--text3) */
   .bm-who { font-family: var(--font-mono); font-size: 9px; color: var(--text3); width: 22px; flex-shrink: 0; }
-  .bm-track { flex: 1; height: 4px; background: rgba(255,255,255,0.05); border-radius: 2px; overflow: hidden; }
+  .bm-track { flex: 1; height: 4px; background: rgba(0,0,0,0.07); border-radius: 2px; overflow: hidden; }
   .bm-fill { height: 100%; border-radius: 2px; transition: width 1s; }
   .bm-val { font-family: var(--font-mono); font-size: 9px; color: var(--text3); width: 28px; text-align: right; flex-shrink: 0; }
   .bm-status { font-family: var(--font-mono); font-size: 9px; padding: 2px 7px; border-radius: 3px; flex-shrink: 0; }
@@ -243,12 +243,12 @@ const dashStyles = `
 
   /* Recommendations */
   .rec-item {
-    background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);
+    background: rgba(0,0,0,0.02); border: 1px solid rgba(0,0,0,0.06);
     border-left: 3px solid transparent; border-radius: var(--r-sm);
     padding: 14px; margin-bottom: 10px; transition: all 0.2s;
   }
   .rec-item:last-child { margin-bottom: 0; }
-  .rec-item:hover { background: rgba(255,255,255,0.04); }
+  .rec-item:hover { background: rgba(0,0,0,0.04); }
   .rec-item.high   { border-left-color: var(--rose); }
   .rec-item.medium { border-left-color: var(--orange); }
   .rec-item.low    { border-left-color: var(--amber); }
@@ -266,16 +266,16 @@ const dashStyles = `
   /* Simulator */
   .sim-panel {
     border-radius: var(--r); padding: 24px;
-    background: linear-gradient(135deg, rgba(124,58,237,0.05) 0%, rgba(6,182,212,0.03) 100%);
-    border: 1px solid rgba(124,58,237,0.2);
+    background: linear-gradient(135deg, rgba(91,33,182,0.05) 0%, rgba(3,105,161,0.03) 100%);
+    border: 1px solid rgba(91,33,182,0.15);
     backdrop-filter: blur(20px); margin-bottom: 12px; position: relative; overflow: hidden;
   }
   .sim-panel::before {
     content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
     background: linear-gradient(90deg, transparent, rgba(124,58,237,0.5), transparent);
   }
-  .sim-title { font-family: var(--font-mono); font-size: 10px; color: #a78bfa; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 4px; display: flex; align-items: center; gap: 7px; }
-  .sim-title-dot { width: 4px; height: 4px; border-radius: 50%; background: #a78bfa; box-shadow: 0 0 6px #a78bfa; }
+  .sim-title { font-family: var(--font-mono); font-size: 10px; color: #5b21b6; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 4px; display: flex; align-items: center; gap: 7px; }
+  .sim-title-dot { width: 4px; height: 4px; border-radius: 50%; background: #5b21b6; box-shadow: none; }
   /* FIX: was var(--text3) old = invisible */
   .sim-subtitle { font-size: 12px; color: var(--text2); margin-bottom: 22px; }
   .sim-sliders { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 18px; }
@@ -288,31 +288,31 @@ const dashStyles = `
 
   input[type="range"].slider {
     -webkit-appearance: none; width: 100%; height: 4px;
-    background: rgba(255,255,255,0.06); border-radius: 2px; cursor: pointer; outline: none;
+    background: rgba(0,0,0,0.10); border-radius: 2px; cursor: pointer; outline: none;
   }
   input[type="range"].slider::-webkit-slider-thumb {
     -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%;
-    background: #7c3aed; border: 2px solid rgba(255,255,255,0.2);
-    box-shadow: 0 0 12px rgba(124,58,237,0.6); cursor: pointer; transition: transform 0.15s;
+    background: #5b21b6; border: 2px solid rgba(255,255,255,0.8);
+    box-shadow: 0 2px 8px rgba(91,33,182,0.35); cursor: pointer; transition: transform 0.15s;
   }
   input[type="range"].slider::-webkit-slider-thumb:hover { transform: scale(1.2); }
   input[type="range"].slider::-moz-range-thumb {
     width: 16px; height: 16px; border-radius: 50%;
-    background: #7c3aed; border: 2px solid rgba(255,255,255,0.2); cursor: pointer;
+    background: #5b21b6; border: 2px solid rgba(255,255,255,0.8); cursor: pointer;
   }
   /* FIX: slider ticks text readable */
   .slider-ticks { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 9px; color: var(--text3); margin-top: 2px; }
   .btn-sim {
     padding: 10px 24px;
-    background: linear-gradient(135deg, rgba(124,58,237,0.2), rgba(124,58,237,0.1));
-    border: 1px solid rgba(124,58,237,0.4); color: #c4b5fd;
+    background: linear-gradient(135deg, rgba(91,33,182,0.12), rgba(91,33,182,0.06));
+    border: 1px solid rgba(91,33,182,0.3); color: #5b21b6;
     border-radius: var(--r-sm); font-family: var(--font-mono); font-size: 11px; font-weight: 600;
     cursor: pointer; transition: all 0.2s; letter-spacing: 0.06em; text-transform: uppercase;
   }
-  .btn-sim:hover { background: rgba(124,58,237,0.28); box-shadow: 0 0 24px rgba(124,58,237,0.3); }
+  .btn-sim:hover { background: rgba(91,33,182,0.16); box-shadow: 0 4px 16px rgba(91,33,182,0.18); }
   .btn-sim:disabled { opacity: 0.4; cursor: not-allowed; }
   .sim-result {
-    background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.05);
+    background: rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.08);
     border-radius: var(--r-sm); padding: 18px;
     display: grid; grid-template-columns: repeat(auto-fill, minmax(120px,1fr));
     gap: 14px; margin-top: 14px;
@@ -320,7 +320,7 @@ const dashStyles = `
   .sim-stat { display: flex; flex-direction: column; gap: 4px; }
   /* FIX: stat label readable */
   .sim-stat-label { font-family: var(--font-mono); font-size: 9px; color: var(--text3); letter-spacing: 0.08em; text-transform: uppercase; }
-  .sim-stat-value { font-family: var(--font-mono); font-size: 18px; font-weight: 600; color: #a5b4fc; }
+  .sim-stat-value { font-family: var(--font-mono); font-size: 18px; font-weight: 600; color: #5b21b6; }
   .sim-delta { font-family: var(--font-mono); font-size: 10px; }
 
   /* FIX: forecast note explicit */
@@ -331,34 +331,34 @@ const dashStyles = `
   .chat-fab {
     position: fixed; bottom: 28px; right: 28px;
     width: 50px; height: 50px; border-radius: 50%;
-    background: linear-gradient(135deg, var(--cyan) 0%, #0891b2 100%);
+    background: linear-gradient(135deg, #0369a1 0%, #0284c7 100%);
     border: none; cursor: pointer;
     display: flex; align-items: center; justify-content: center;
-    font-size: 20px; box-shadow: 0 4px 24px rgba(6,182,212,0.4);
+    font-size: 20px; box-shadow: 0 4px 24px rgba(3,105,161,0.25);
     transition: all 0.25s; z-index: 200;
   }
-  .chat-fab:hover { transform: scale(1.08); box-shadow: 0 8px 32px rgba(6,182,212,0.5); }
+  .chat-fab:hover { transform: scale(1.08); box-shadow: 0 8px 32px rgba(3,105,161,0.30); }
 
   .chat-panel {
     position: fixed; bottom: 90px; right: 28px;
     width: 350px; max-height: 490px;
-    background: rgba(10,12,18,0.97);
-    border: 1px solid rgba(6,182,212,0.2);
+    background: rgba(255,255,255,0.98);
+    border: 1px solid rgba(3,105,161,0.15);
     border-radius: var(--r); backdrop-filter: blur(32px);
     display: flex; flex-direction: column; z-index: 200;
-    box-shadow: 0 24px 60px rgba(0,0,0,0.6);
+    box-shadow: 0 24px 60px rgba(0,0,0,0.14);
     animation: slideUp 0.25s cubic-bezier(0.22,1,0.36,1);
     overflow: hidden;
   }
   @media(max-width:480px){ .chat-panel { left:16px; right:16px; width:auto; bottom:80px; } }
 
   .chat-header {
-    padding: 14px 16px; border-bottom: 1px solid rgba(255,255,255,0.05);
+    padding: 14px 16px; border-bottom: 1px solid rgba(0,0,0,0.08);
     display: flex; align-items: center; gap: 10px;
   }
   .chat-icon {
     width: 30px; height: 30px; border-radius: 50%;
-    background: rgba(6,182,212,0.15); border: 1px solid rgba(6,182,212,0.3);
+    background: rgba(3,105,161,0.10); border: 1px solid rgba(3,105,161,0.20);
     display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0;
   }
   /* FIX: chat header text explicit */
@@ -370,47 +370,47 @@ const dashStyles = `
   .chat-msg { padding: 10px 13px; border-radius: 10px; font-size: 12px; line-height: 1.6; max-width: 88%; }
   /* FIX: user msg explicit color */
   .chat-msg.user {
-    background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.15);
+    background: rgba(180,83,9,0.07); border: 1px solid rgba(180,83,9,0.15);
     color: var(--text);
     align-self: flex-end; font-family: var(--font-mono); font-size: 11px;
   }
   /* FIX: ai msg explicit color */
-  .chat-msg.ai { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); color: var(--text2); align-self: flex-start; }
+  .chat-msg.ai { background: rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.07); color: var(--text2); align-self: flex-start; }
   .chat-msg.loading { opacity: 0.5; font-style: italic; font-family: var(--font-mono); font-size: 11px; color: var(--text3); }
   .chat-quick { display: flex; gap: 5px; flex-wrap: wrap; padding: 0 14px 10px; }
   /* FIX: quick btns explicit color */
   .chat-qbtn {
-    padding: 4px 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
+    padding: 4px 10px; background: rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.08);
     border-radius: 20px; font-family: var(--font-mono); font-size: 10px;
     color: var(--text3);
     cursor: pointer; transition: all 0.2s;
   }
   .chat-qbtn:hover { border-color: var(--cyan); color: var(--cyan); }
-  .chat-input-wrap { padding: 12px 14px; border-top: 1px solid rgba(255,255,255,0.05); display: flex; gap: 8px; }
+  .chat-input-wrap { padding: 12px 14px; border-top: 1px solid rgba(0,0,0,0.08); display: flex; gap: 8px; }
   /* FIX: input explicit color */
   .chat-input {
-    flex: 1; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07);
+    flex: 1; background: #f5f5f5; border: 1px solid rgba(0,0,0,0.10);
     color: var(--text);
     padding: 9px 12px; border-radius: var(--r-xs);
     font-family: var(--font-mono); font-size: 12px; outline: none; transition: border-color 0.2s;
   }
-  .chat-input:focus { border-color: rgba(6,182,212,0.4); }
+  .chat-input:focus { border-color: rgba(3,105,161,0.4); }
   /* FIX: placeholder was var(--text4) invisible → var(--text3) subtle */
   .chat-input::placeholder { color: var(--text3); opacity: 0.6; }
   /* FIX: send btn text explicit dark on cyan bg */
   .chat-send {
-    padding: 9px 14px; background: var(--cyan); color: #0c0e14;
+    padding: 9px 14px; background: #0369a1; color: #ffffff;
     border: none; border-radius: var(--r-xs); font-family: var(--font-mono);
     font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.2s; white-space: nowrap;
   }
-  .chat-send:hover { background: #22d3ee; }
+  .chat-send:hover { background: #0284c7; }
   .chat-send:disabled { opacity: 0.4; cursor: not-allowed; }
 
   /* Copy toast */
   .copy-toast {
     position: fixed; bottom: 28px; left: 50%;
     transform: translateX(-50%) translateY(60px);
-    background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.3);
+    background: rgba(6,95,70,0.10); border: 1px solid rgba(6,95,70,0.25);
     color: var(--emerald);
     padding: 10px 20px; border-radius: 30px;
     font-family: var(--font-mono); font-size: 12px;
@@ -440,7 +440,7 @@ function BenchmarkRows({ benchmarks }) {
               </div>
               <div className="bm-row">
                 <div className="bm-who">Avg</div>
-                <div className="bm-track"><div className="bm-fill" style={{width:pct(data.industry,max)+"%",background:"rgba(255,255,255,0.18)"}}/></div>
+                <div className="bm-track"><div className="bm-fill" style={{width:pct(data.industry,max)+"%",background:"rgba(0,0,0,0.18)"}}/></div>
                 <div className="bm-val">{data.industry}</div>
               </div>
             </div>
@@ -792,7 +792,7 @@ export default function ResultsDashboard({ result, animScore, form, inputMode, u
                       <stop offset="95%" stopColor="#f97316" stopOpacity={0}/>
                     </linearGradient>
                   </defs>
-                  <CartesianGrid stroke="rgba(255,255,255,0.04)" strokeDasharray="3 3" vertical={false}/>
+                  <CartesianGrid stroke="rgba(0,0,0,0.06)" strokeDasharray="3 3" vertical={false}/>
                   <XAxis dataKey="period" tick={TICK} axisLine={false} tickLine={false}/>
                   <YAxis domain={[0,100]} tick={TICK} axisLine={false} tickLine={false}/>
                   <Tooltip content={<CustomTooltip/>}/>
@@ -804,8 +804,8 @@ export default function ResultsDashboard({ result, animScore, form, inputMode, u
                     dot={(p) => {
                       const{cx,cy,payload,index}=p;
                       return payload.type==="forecast"
-                        ?<circle key={index} cx={cx} cy={cy} r={3} fill="#f97316" stroke="#0c0e14" strokeWidth={1.5}/>
-                        :<circle key={index} cx={cx} cy={cy} r={4} fill={gColor} stroke="#0c0e14" strokeWidth={1.5}/>;
+                        ?<circle key={index} cx={cx} cy={cy} r={3} fill="#f97316" stroke="#ffffff" strokeWidth={1.5}/>
+                        :<circle key={index} cx={cx} cy={cy} r={4} fill={gColor} stroke="#ffffff" strokeWidth={1.5}/>;
                     }}
                   />
                 </AreaChart>

@@ -1,14 +1,12 @@
-// =============================================================================
-//  Header — Original Deep Slate + Amber theme, text colors fixed
-// =============================================================================
+// Header — Black & White Light Theme
 
 const headerStyles = `
   .header {
     display: flex; align-items: center; justify-content: space-between;
     padding: 16px 0; position: sticky; top: 0; z-index: 100;
-    background: rgba(12,14,20,0.85);
+    background: rgba(255,255,255,0.92);
     backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(0,0,0,0.08);
     margin: 0 -24px; padding-left: 24px; padding-right: 24px;
   }
 
@@ -16,12 +14,12 @@ const headerStyles = `
 
   .logo-mark {
     width: 38px; height: 38px;
-    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    background: linear-gradient(135deg, #1a1a1a 0%, #3a3a3a 100%);
     border-radius: 10px;
     display: flex; align-items: center; justify-content: center;
     font-family: var(--font-mono); font-size: 14px; font-weight: 600;
-    color: #0c0e14;
-    box-shadow: 0 0 20px rgba(245,158,11,0.3); flex-shrink: 0;
+    color: #ffffff;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.18); flex-shrink: 0;
   }
 
   .logo-name {
@@ -32,7 +30,6 @@ const headerStyles = `
 
   .logo-name em { color: var(--amber); font-style: normal; }
 
-  /* FIX: was var(--text3)=#475569 — invisible on #0c0e14. Now var(--text3)=#7a9ab0 */
   .logo-tag {
     font-family: var(--font-mono); font-size: 9px;
     color: var(--text3);
@@ -48,10 +45,9 @@ const headerStyles = `
     letter-spacing: 0.07em; border: 1px solid;
   }
 
-  .status-pill.ok    { background: rgba(245,158,11,0.08); border-color: rgba(245,158,11,0.25); color: var(--amber); }
-  .status-pill.err   { background: rgba(244,63,94,0.08);  border-color: rgba(244,63,94,0.25);  color: var(--rose); }
-  /* FIX: checking state text was inheriting dark — now var(--text2) */
-  .status-pill.checking { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.1); color: var(--text2); }
+  .status-pill.ok    { background: rgba(180,83,9,0.08); border-color: rgba(180,83,9,0.25); color: var(--amber); }
+  .status-pill.err   { background: rgba(190,18,60,0.08); border-color: rgba(190,18,60,0.25); color: var(--rose); }
+  .status-pill.checking { background: rgba(0,0,0,0.04); border-color: rgba(0,0,0,0.12); color: var(--text2); }
 
   .status-dot {
     width: 5px; height: 5px; border-radius: 50%;
