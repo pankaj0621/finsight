@@ -1,4 +1,7 @@
-// LoadingScreen — Black & White Light Theme
+// =============================================================================
+//  LoadingScreen — Original theme, text fixed
+//  FIX: loading-step was var(--text4)=#334155 — invisible → now var(--text3)
+// =============================================================================
 
 import { LOADING_STEPS } from "../utils/constants.js";
 
@@ -11,11 +14,12 @@ const loadingStyles = `
 
   .loader-ring {
     width: 60px; height: 60px; border-radius: 50%;
-    border: 2px solid rgba(0,0,0,0.08);
-    border-top-color: #1a1a1a;
+    border: 2px solid rgba(255,255,255,0.05);
+    border-top-color: var(--amber);
     animation: spin 0.9s linear infinite;
   }
 
+  /* FIX: was defaulting to inherit — now explicit */
   .loading-title {
     font-family: var(--font-mono); font-size: 12px;
     color: var(--text2);
@@ -24,6 +28,8 @@ const loadingStyles = `
 
   .loading-steps { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
 
+  /* FIX: was var(--text4)=#334155 — nearly invisible on #0c0e14
+     Now var(--text3)=#7a9ab0 which is clearly readable */
   .loading-step {
     font-family: var(--font-mono); font-size: 11px;
     color: var(--text3);
@@ -33,9 +39,11 @@ const loadingStyles = `
 
   .loading-step::before { content: '○'; font-size: 10px; }
 
+  /* Active = cyan, clearly visible */
   .loading-step.active { color: var(--cyan); }
   .loading-step.active::before { content: '◉'; color: var(--cyan); }
 
+  /* Done = amber, clearly visible */
   .loading-step.done { color: var(--amber); }
   .loading-step.done::before { content: '✓'; color: var(--amber); }
 `;
